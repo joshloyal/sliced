@@ -2,6 +2,10 @@ import numpy as np
 import scipy.linalg as linalg
 
 
+def is_multioutput(y):
+    return hasattr(y, "shape") and y.ndim == 2 and y.shape[1] > 1
+
+
 def whiten_X(X, center=True, method='cholesky', copy=False):
     """Whiten a data matrix using either the choleksy, QR or
     spectral method."""

@@ -3,9 +3,10 @@ import scipy.linalg as linalg
 
 from scipy.sparse import issparse
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.utils import check_X_y
+from sklearn.utils import check_array, check_X_y
+from sklearn.utils.validation import check_is_fitted
 
-from .base import whiten_X, slice_X
+from .base import whiten_X, slice_X, is_multioutput
 
 
 def grouped_sum(array, groups):
@@ -29,6 +30,18 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
         else:
             n_components = self.n_components
 
+        # validate y
+        if is_multioutput(y):
+            raise TypeError("The target `y` cannot be multi-output.")
+
+        # `n_slices` must be less-than or equal to the number of unique values
+        # of `y`.
+        n_y_values = np.unique(y).shape[0]
+        if self.n_slices > n_y_values:
+            n_slices = n_y_values
+        else:
+            n_slices = self.n_slices
+
         # Center and Whiten feature matrix using the cholesky decomposition
         # (the original implementation uses QR, but this has numeric errors).
         Z, sigma_inv = whiten_X(X, method='cholesky', copy=False)
@@ -37,7 +50,7 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
         Z = Z[np.argsort(y), :]
 
         # determine slice indices and counts per slice
-        slices, counts = slice_X(Z, self.n_slices)
+        slices, counts = slice_X(Z, n_slices)
 
         # means in each slice (sqrt factor takes care of the weighting)
         Z_means = grouped_sum(Z, slices) / np.sqrt(counts.reshape(-1,1))
@@ -50,4 +63,7 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X):
+        check_is_fitted(self, 'components_')
+
+        X = check_array(X)
         return np.dot(X, self.components_)

@@ -2,22 +2,41 @@ import numpy as np
 
 from scipy import linalg
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.utils import check_X_y
+from sklearn.utils import check_array, check_X_y
+from sklearn.utils.validation import check_is_fitted
 
-from .base import whiten_X, slice_X
+from .base import whiten_X, slice_X, is_multioutput
 
 
 class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
-    def __init__(self, n_components=2, n_slices=10, copy=True):
+    def __init__(self, n_components=None, n_slices=10, copy=True):
         self.n_components = n_components
         self.n_slices = n_slices
         self.copy = copy
 
     def fit(self, X, y):
-        n_samples, n_features = X.shape
-
         X, y = check_X_y(X, y, dtype=[np.float64, np.float32],
                          y_numeric=True, copy=self.copy)
+
+        # handle n_components == None
+        if self.n_components is None:
+            n_components = X.shape[1]
+        else:
+            n_components = self.n_components
+
+        # validate y
+        if is_multioutput(y):
+            raise TypeError("The target `y` cannot be multi-output.")
+
+        # `n_slices` must be less-than or equal to the number of unique values
+        # of `y`.
+        n_y_values = np.unique(y).shape[0]
+        if self.n_slices > n_y_values:
+            n_slices = n_y_values
+        else:
+            n_slices = self.n_slices
+
+        n_samples, n_features = X.shape
 
         # Center and Whiten feature matrix using the cholesky decomposition
         # (the original implementation uses QR, but this has numeric errors).
@@ -27,11 +46,11 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
         Z = Z[np.argsort(y), :]
 
         # determine slices and counts
-        slices, counts = slice_X(Z, self.n_slices)
+        slices, counts = slice_X(Z, n_slices)
 
         # construct slice covariance matrices
         M = np.zeros((n_features, n_features))
-        for slice_idx in range(self.n_slices):
+        for slice_idx in range(n_slices):
             n_slice = counts[slice_idx]
 
             # center the entries in this slice
@@ -51,4 +70,7 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X):
+        check_is_fitted(self, 'components_')
+
+        X = check_array(X)
         return np.dot(X, self.components_)
