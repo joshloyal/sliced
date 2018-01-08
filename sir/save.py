@@ -20,8 +20,9 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
         X, y = check_X_y(X, y, dtype=[np.float64, np.float32],
                          y_numeric=True, copy=self.copy)
 
-        # center and whiten  data
-        Z, sigma_inv = whiten_X(X)
+        # Center and whiten feature matrix using the cholesky decomposition
+        # (the original implementation uses QR, but this has numeric errors).
+        Z, sigma_inv = whiten_X(X, method='cholesky')
 
         # sort rows of Z with respect to the target y
         Z = Z[np.argsort(y), :]
