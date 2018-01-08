@@ -1,7 +1,6 @@
 import numpy as np
 import scipy.linalg as linalg
 
-from scipy.sparse import issparse
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils import check_array, check_X_y
 from sklearn.utils.validation import check_is_fitted
@@ -10,6 +9,7 @@ from .base import whiten_X, slice_X, is_multioutput
 
 
 def grouped_sum(array, groups):
+    """Sums an array by groups. Groups are assumed to be contiguous by row."""
     inv_idx = np.concatenate(([0], np.diff(groups).nonzero()[0]))
     return np.add.reduceat(array, inv_idx)
 
@@ -80,6 +80,23 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
         self.copy = copy
 
     def fit(self, X, y):
+        """Fit the model with X and y.
+
+        Parameters
+        ----------
+        X : array-like, shape (n_samples, n_features)
+            Training data, where n_samples is the number of samples
+            and n_features is the number of features.
+
+        y : array-like, shape (n_samples,)
+            The target values (class labels in classification, real numbers
+            in regression).
+
+        Returns
+        -------
+        self : object
+            Returns the instance itself.
+        """
         X, y = check_X_y(X, y, dtype=[np.float64, np.float32],
                          y_numeric=True, copy=self.copy)
 
@@ -122,6 +139,23 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X):
+        """Apply dimension reduction on X.
+
+        X is projected onto the EDR-directions previously extracted from a
+        training set.
+
+        Parameters
+        ----------
+        X : array-like, shape (n_samples, n_features)
+            New data, where n_samples in the number of samples
+            and n_features is the number of features.
+
+
+        Returns
+        -------
+        X_new : array-like, shape (n_samples, n_components)
+
+        """
         check_is_fitted(self, 'components_')
 
         X = check_array(X)
