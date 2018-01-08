@@ -5,12 +5,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils import check_X_y
 
 
-def grouped_sum(array, groups):
-    inv_idx = np.concatenate(([0], np.diff(groups).nonzero()[0]))
-    return np.add.reduceat(array, inv_idx)
-
-
-class SlicedInverseRegression(BaseEstimator, TransformerMixin):
+class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
     def __init__(self, n_components=2, n_slices=10, copy=True):
         self.n_components = n_components
         self.n_slices = n_slices
@@ -39,8 +34,14 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
                            np.ceil(n_samples / self.n_slices))[:n_samples]
         slice_counts = np.bincount(slices)
 
-        # means in each slice (takes care of the weighting)
-        Z_sliced = grouped_sum(Z, slices) / np.sqrt(slice_counts.reshape(-1,1))
+        # construct slice covariance matrices
+        Z_sliced = np.zeros((n_features, n_features))
+        for slice_idx in range(self.n_slices):
+            n_slice = slice_counts[slice_idx]
+            Z_slice = Z[slices == slice_idx, :]
+            Z_slice = Z_slice - np.mean(Z_slice, axis=0)
+            V_slice = np.eye(n_features) - (np.dot(Z_slice.T, Z_slice) / (n_slice - 1))
+            Z_sliced += (n_slice / n_samples) * np.dot(V_slice, V_slice)
 
         # PCA of slice matrix
         U, S, V = linalg.svd(Z_sliced, full_matrices=True)
