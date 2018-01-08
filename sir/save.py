@@ -4,7 +4,6 @@ from scipy import linalg
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils import check_X_y
 
-
 from .base import whiten_X, slice_X
 
 
@@ -20,9 +19,9 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
         X, y = check_X_y(X, y, dtype=[np.float64, np.float32],
                          y_numeric=True, copy=self.copy)
 
-        # Center and whiten feature matrix using the cholesky decomposition
+        # Center and Whiten feature matrix using the cholesky decomposition
         # (the original implementation uses QR, but this has numeric errors).
-        Z, sigma_inv = whiten_X(X, method='cholesky')
+        Z, sigma_inv = whiten_X(X, method='cholesky', copy=False)
 
         # sort rows of Z with respect to the target y
         Z = Z[np.argsort(y), :]

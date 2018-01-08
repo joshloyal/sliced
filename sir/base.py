@@ -2,15 +2,22 @@ import numpy as np
 import scipy.linalg as linalg
 
 
-def whiten_X(X, method='cholesky'):
+def whiten_X(X, center=True, method='cholesky', copy=False):
+    """Whiten a data matrix using either the choleksy, QR or
+    spectral method."""
     n_samples = X.shape[0]
 
     # center data
-    X -= np.mean(X, axis=0)
 
-    sigma = np.dot(X.T, X) / (n_samples - 1)
+    if center:
+        means = np.mean(X, axis=0)
+        if copy:
+            X = X - np.mean(X, axis=0)
+        else:
+            X -= means
 
     if method == 'cholesky':
+        sigma = np.dot(X.T, X) / (n_samples - 1)
         L = linalg.cholesky(sigma)
         sigma_inv = linalg.solve_triangular(L, np.eye(L.shape[0]))
         Z = np.dot(X, sigma_inv)
@@ -19,6 +26,7 @@ def whiten_X(X, method='cholesky'):
         sigma_inv = linalg.solve_triangular(R, np.eye(R.shape[0]))
         Z = np.sqrt(n_samples) * Q
     elif method == 'spectral':
+        sigma = np.dot(X.T, X) / (n_samples - 1)
         sigma_inv = linalg.inv(linalg.sqrtm(sigma))
         Z = np.dot(X, sigma_inv)
     else:
@@ -30,6 +38,7 @@ def whiten_X(X, method='cholesky'):
 
 
 def slice_X(X, n_slices):
+    """Create equal slices of a matrix."""
     n_samples = X.shape[0]
 
     slices = np.repeat(np.arange(n_slices),

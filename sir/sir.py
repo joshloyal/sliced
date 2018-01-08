@@ -1,9 +1,9 @@
 import numpy as np
+import scipy.linalg as linalg
 
 from scipy.sparse import issparse
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils import check_X_y
-
 
 from .base import whiten_X, slice_X
 
@@ -29,9 +29,9 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
         else:
             n_components = self.n_components
 
-        # Center and whiten feature matrix using the cholesky decomposition
+        # Center and Whiten feature matrix using the cholesky decomposition
         # (the original implementation uses QR, but this has numeric errors).
-        Z, sigma_inv = whiten_X(X, method='cholesky')
+        Z, sigma_inv = whiten_X(X, method='cholesky', copy=False)
 
         # sort rows of Z with respect to y
         Z = Z[np.argsort(y), :]
