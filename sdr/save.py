@@ -67,7 +67,7 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
     References
     ----------
 
-    [1] Shao, Y, Cook, RD and WEisberg, S (2007).
+    [1] Shao, Y, Cook, RD and Weisberg, S (2007).
         "Marginal Tests with Sliced Average Variance Estimation",
         Biometrika, 94, 285-296.
     """
