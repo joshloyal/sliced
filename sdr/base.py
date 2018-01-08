@@ -8,7 +8,6 @@ def whiten_X(X, center=True, method='cholesky', copy=False):
     n_samples = X.shape[0]
 
     # center data
-
     if center:
         means = np.mean(X, axis=0)
         if copy:

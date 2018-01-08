@@ -1,7 +1,7 @@
 import numpy as np
 
-from sir import SlicedAverageVarianceEstimation
-from sir import datasets
+from sdr import SlicedAverageVarianceEstimation
+from sdr import datasets
 
 
 def test_save_cubic():

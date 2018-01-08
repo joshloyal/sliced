@@ -1,6 +1,6 @@
 import numpy as np
 
-from sir.base import whiten_X
+from sdr.base import whiten_X
 
 
 rng = np.random.RandomState(123)

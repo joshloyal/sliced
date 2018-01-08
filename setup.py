@@ -2,18 +2,18 @@ from setuptools import setup
 
 
 PACKAGES = [
-    'sir',
-    'sir.tests',
+    'sdr',
+    'sdr.tests',
 ]
 
 
 def setup_package():
     setup(
-        name="Sliced Inverse Regression",
+        name="Sufficient Dimension Reduction",
         version='0.1.0',
-        description='Scikit-Learn compatabile Sliced Inverse Regression',
+        description='Scikit-Learn compatabile Sufficient Dimension Reduction algorithms.',
         author='Joshua D. Loyal',
-        url='https://github.com/joshloyal/SlicedInverseRegression',
+        url='https://github.com/joshloyal/SufficientDimensionReduction',
         license='MIT',
         install_requires=['numpy', 'scipy', 'scikit-learn'],
         packages=PACKAGES
