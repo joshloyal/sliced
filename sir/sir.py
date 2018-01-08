@@ -5,24 +5,9 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils import check_array
 
 
-def grouped_sum(array, groups, axis=0, issorted=False):
-    array = np.asarray(array)
-    groups = np.asarray(groups)
-
-    if issorted:
-        aux = groups
-        ordered_array = array
-    else:
-        perm = groups.argsort()
-        aux = groups[perm]
-        ordered_array = array[perm]
-
-    flag = np.concatenate(([True], aux[1:] != aux[:-1]))
-    inv_idx, = flag.nonzero()
-
-    result = np.add.reduceat(ordered_array, inv_idx)
-
-    return result
+def grouped_sum(array, groups):
+    inv_idx = np.concatenate(([0], np.diff(groups).nonzero()[0]))
+    return np.add.reduceat(array, inv_idx)
 
 
 class SlicedInverseRegression(BaseEstimator, TransformerMixin):
@@ -37,11 +22,11 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
         X = check_array(X, dtype=[np.float64, np.float32], ensure_2d=True,
                         copy=self.copy)
 
-        # center adata
+        # center data
         X -= np.mean(X, axis=0)
 
         # whiten data using cholesky decomposition
-        sigma = np.cov(X.T)
+        sigma = np.dot(X.T, X) / (n_samples - 1)
         L = linalg.cholesky(sigma)
         L_inv = linalg.solve_triangular(L, np.eye(L.shape[0]))
         Z = np.dot(X, L_inv)
@@ -49,24 +34,20 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
         # sort rows of Z w.r.t y
         Z = Z[np.argsort(y), :]
 
-        # determine slice indices
+        # determine slices and counts
         slices = np.repeat(np.arange(1, self.n_slices),
                            np.ceil(n_samples / self.n_slices))[:n_samples]
         slice_counts = np.bincount(slices)[1:]
 
-        # means in each slice
-        Z_sliced = grouped_sum(Z, slices) / slice_counts.reshape(-1, 1)
+        # means in each slice (takes care of the weighting)
+        Z_sliced = grouped_sum(Z, slices) / np.sqrt(slice_counts.reshape(-1,1))
 
-        # covariance
-        Z_sliced *= np.sqrt(slice_counts).reshape(-1, 1)
-        Z_cov = np.dot(Z_sliced.T, Z_sliced)
-
-        # eigen decomposition
-        evalues, evectors = linalg.eig(Z_cov)
-        self.vectors_ = np.dot(evectors, L_inv)
-        self.vectors_ = self.vectors_[:, :self.n_components]
+        # PCA of slice matrix
+        U, S, V = linalg.svd(Z_sliced, full_matrices=True)
+        self.components_ = np.dot(V.T, L_inv)[:, :self.n_components]
+        self.singular_values_ = S ** 2
 
         return self
 
     def transform(self, X):
-        return np.dot(X, self.vectors_)
+        return np.dot(X, self.components_)
