@@ -5,6 +5,9 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils import check_X_y
 
 
+from .base import whiten_X, slice_X
+
+
 class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
     def __init__(self, n_components=2, n_slices=10, copy=True):
         self.n_components = n_components
@@ -17,35 +20,32 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
         X, y = check_X_y(X, y, dtype=[np.float64, np.float32],
                          y_numeric=True, copy=self.copy)
 
-        # center data
-        X -= np.mean(X, axis=0)
+        # center and whiten  data
+        Z, sigma_inv = whiten_X(X)
 
-        # whiten data using cholesky decomposition
-        sigma = np.dot(X.T, X) / (n_samples - 1)
-        L = linalg.cholesky(sigma)
-        L_inv = linalg.solve_triangular(L, np.eye(L.shape[0]))
-        Z = np.dot(X, L_inv)
-
-        # sort rows of Z w.r.t y
+        # sort rows of Z with respect to the target y
         Z = Z[np.argsort(y), :]
 
         # determine slices and counts
-        slices = np.repeat(np.arange(self.n_slices),
-                           np.ceil(n_samples / self.n_slices))[:n_samples]
-        slice_counts = np.bincount(slices)
+        slices, counts = slice_X(Z, self.n_slices)
 
         # construct slice covariance matrices
-        Z_sliced = np.zeros((n_features, n_features))
+        M = np.zeros((n_features, n_features))
         for slice_idx in range(self.n_slices):
-            n_slice = slice_counts[slice_idx]
+            n_slice = counts[slice_idx]
+
+            # center the entries in this slice
             Z_slice = Z[slices == slice_idx, :]
-            Z_slice = Z_slice - np.mean(Z_slice, axis=0)
-            V_slice = np.eye(n_features) - (np.dot(Z_slice.T, Z_slice) / (n_slice - 1))
-            Z_sliced += (n_slice / n_samples) * np.dot(V_slice, V_slice)
+            Z_slice -= np.mean(Z_slice, axis=0)
+
+            # slice covariance matrix
+            V_slice = np.dot(Z_slice.T, Z_slice) / (n_slice - 1)
+            M_slice = np.eye(n_features) - V_slice
+            M += (n_slice / n_samples) * np.dot(M_slice, M_slice)
 
         # PCA of slice matrix
-        U, S, V = linalg.svd(Z_sliced, full_matrices=True)
-        self.components_ = np.dot(V.T, L_inv)[:, :self.n_components]
+        U, S, V = linalg.svd(M, full_matrices=True)
+        self.components_ = np.dot(V.T, sigma_inv)[:, :self.n_components]
         self.singular_values_ = S ** 2
 
         return self

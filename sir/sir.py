@@ -1,8 +1,14 @@
+import abc
+import six
+
 import numpy as np
 
 from scipy import linalg
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils import check_X_y
+
+
+from .base import whiten_X, slice_X
 
 
 def grouped_sum(array, groups):
@@ -22,29 +28,21 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
         X, y = check_X_y(X, y, dtype=[np.float64, np.float32],
                          y_numeric=True, copy=self.copy)
 
-        # center data
-        X -= np.mean(X, axis=0)
+        # center and whiten feature matrix
+        Z, sigma_inv = whiten_X(X)
 
-        # whiten data using cholesky decomposition
-        sigma = np.dot(X.T, X) / (n_samples - 1)
-        L = linalg.cholesky(sigma)
-        L_inv = linalg.solve_triangular(L, np.eye(L.shape[0]))
-        Z = np.dot(X, L_inv)
-
-        # sort rows of Z w.r.t y
+        # sort rows of Z with respect to y
         Z = Z[np.argsort(y), :]
 
-        # determine slices and counts
-        slices = np.repeat(np.arange(self.n_slices),
-                           np.ceil(n_samples / self.n_slices))[:n_samples]
-        slice_counts = np.bincount(slices)
+        # determine slice indices and counts per slice
+        slices, counts = slice_X(Z, self.n_slices)
 
-        # means in each slice (takes care of the weighting)
-        Z_sliced = grouped_sum(Z, slices) / np.sqrt(slice_counts.reshape(-1,1))
+        # means in each slice (sqrt factor takes care of the weighting)
+        Z_means = grouped_sum(Z, slices) / np.sqrt(counts.reshape(-1,1))
 
         # PCA of slice matrix
-        U, S, V = linalg.svd(Z_sliced, full_matrices=True)
-        self.components_ = np.dot(V.T, L_inv)[:, :self.n_components]
+        U, S, V = linalg.svd(Z_means, full_matrices=True)
+        self.components_ = np.dot(V.T, sigma_inv)[:, :self.n_components]
         self.singular_values_ = S ** 2
 
         return self
