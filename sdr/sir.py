@@ -15,6 +15,65 @@ def grouped_sum(array, groups):
 
 
 class SlicedInverseRegression(BaseEstimator, TransformerMixin):
+    """Sliced Inverse Regression (SIR) [1]
+
+    Linear dimensionality reduction using the inverse regression curve,
+    E[X|y], to identify the effective dimension reducing (EDR) directions.
+    The inverse comes from the fact that X and y are reversed with respect
+    to the standard regression framework (estimating E[y|X]).
+
+    The algorithm performs a weighted principal component analysis on
+    slices of the whitened data, which has been sorted with respect to
+    the target, y.
+
+    For a binary target the directions found correspond to those found
+    with Fisher's Linear Discriminant Analysis (LDA).
+
+    Parameters
+    ----------
+    n_components : int, None (default=None)
+        Number of directions to keep. Corresponds to the dimension of
+        the EDR-space.
+
+    n_slices : int (default=10)
+        The number of slices used when calculating the inverse regression
+        curve. Should be <= the number of unique values of ``y``.
+
+    copy : bool (default=True)
+         If False, data passed to fit are overwritten and running
+         fit(X).transform(X) will not yield the expected results,
+         use fit_transform(X) instead.
+
+    Attributes
+    ----------
+    components_ : array, shape (n_features, n_components)
+        EDR directions in feature space, representing the EDR-subspace
+        which is sufficient to describe the conditional distribution
+        y|X. The components are sorted by ``eigenvalues_``.
+
+    singular_values_ : array, shape (n_components,)
+        The singular values corresponding to each of the selected components.
+        These are equivalent to the eigenvalues of the covariance matrix
+        of the inverse regression curve. Larger eigenvalues indicate
+        more prevelant directions.
+
+    Examples
+    --------
+
+    >>> import numpy as np
+    >>> from sdr import SlicedInverseRegression
+    >>> from sdr.datasets import make_cubic
+    >>> X, y = make_cubic(random_state=123)
+    >>> X_sir = SlicedInverseRegression(n_components=2).fit_transform(X, y)
+    >>> X_sir.shape
+    (500, 2)
+
+    References
+    ----------
+
+    [1] Li, K-C. (1991) "Sliced Inverse Regression for Dimension Reduction", Journal of
+    the American Statistical Association, 86, 316-327.
+    """
     def __init__(self, n_components=None, n_slices=10, copy=True):
         self.n_components = n_components
         self.n_slices = n_slices
