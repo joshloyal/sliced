@@ -17,7 +17,7 @@ X, y = datasets.make_cubic(random_state=123)
 sir = sdr.SlicedInverseRegression()
 X_sir = sir.fit_transform(X, y)
 
-# estimate of the first effective dimension reducing direction (EDR)
+# estimate of the first dimension reducing directions
 beta1_hat = sir.components_[:, 0]
 
 

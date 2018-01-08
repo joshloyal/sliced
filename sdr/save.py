@@ -9,12 +9,91 @@ from .base import whiten_X, slice_X, is_multioutput
 
 
 class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
+    """Sliced Average Variance Estimation (SAVE) [1]
+
+    Linear dimensionality reduction using the conditional covariance, Cov(X|y),
+    to identify the directions defining the central subspace of the data.
+
+    The algorithm performs a weighted principal component analysis on a
+    transformation of slices of the covariance matrix of the whitened
+    data, which has been sorted with respect to the target, y.
+
+    Since SAVE looks at second moment information, it may miss first-moment
+    information. In particular, it may miss linear trends. See
+    :class:`SlicedInverseRegression`, which is able to detect linear trends
+    but may fail in other situations. If possible, both SIR and SAVE should
+    be used when analyzing a dataset.
+
+    Parameters
+    ----------
+    n_components : int, None (default=None)
+        Number of directions to keep. Corresponds to the dimension of
+        the central subpace.
+
+    n_slices : int (default=10)
+        The number of slices used when calculating the inverse regression
+        curve. Should be <= the number of unique values of ``y``.
+
+    copy : bool (default=True)
+         If False, data passed to fit are overwritten and running
+         fit(X).transform(X) will not yield the expected results,
+         use fit_transform(X) instead.
+
+    Attributes
+    ----------
+    components_ : array, shape (n_features, n_components)
+        The directions in feature space, representing the
+        central subspace which is sufficient to describe the conditional
+        distribution y|X. The components are sorted by ``singular_values_``.
+
+    singular_values_ : array, shape (n_components,)
+        The singular values corresponding to each of the selected components.
+        These are equivalent to the eigenvalues of the covariance matrix
+        of the inverse regression curve. Larger eigenvalues indicate
+        more prevelant directions.
+
+    Examples
+    --------
+
+    >>> import numpy as np
+    >>> from sdr import SlicedAverageVarianceEstimation
+    >>> from sdr.datasets import make_cubic
+    >>> X, y = make_quadratic(random_state=123)
+    >>> save = SlicedAverageVarianceEstimation(n_components=2)
+    >>> X_save = save.fit_transform(X, y)
+    >>> X_save.shape
+    (500, 2)
+
+    References
+    ----------
+
+    [1] Shao, Y, Cook, RD and WEisberg, S (2007).
+        "Marginal Tests with Sliced Average Variance Estimation",
+        Biometrika, 94, 285-296.
+    """
     def __init__(self, n_components=None, n_slices=10, copy=True):
         self.n_components = n_components
         self.n_slices = n_slices
         self.copy = copy
 
     def fit(self, X, y):
+        """Fit the model with X and y.
+
+        Parameters
+        ----------
+        X : array-like, shape (n_samples, n_features)
+            Training data, where n_samples is the number of samples
+            and n_features is the number of features.
+
+        y : array-like, shape (n_samples,)
+            The target values (class labels in classification, real numbers
+            in regression).
+
+        Returns
+        -------
+        self : object
+            Returns the instance itself.
+        """
         X, y = check_X_y(X, y, dtype=[np.float64, np.float32],
                          y_numeric=True, copy=self.copy)
 
@@ -70,6 +149,23 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X):
+        """Apply dimension reduction on X.
+
+        X is projected onto the EDR-directions previously extracted from a
+        training set.
+
+        Parameters
+        ----------
+        X : array-like, shape (n_samples, n_features)
+            New data, where n_samples in the number of samples
+            and n_features is the number of features.
+
+
+        Returns
+        -------
+        X_new : array-like, shape (n_samples, n_components)
+
+        """
         check_is_fitted(self, 'components_')
 
         X = check_array(X)

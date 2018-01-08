@@ -3,6 +3,7 @@ import scipy.linalg as linalg
 
 
 def is_multioutput(y):
+    """Whether the target y is multi-output (or multi-index)"""
     return hasattr(y, "shape") and y.ndim == 2 and y.shape[1] > 1
 
 

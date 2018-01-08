@@ -17,7 +17,7 @@ X, y = datasets.make_quadratic(random_state=123)
 save = sdr.SlicedAverageVarianceEstimation()
 X_save = save.fit_transform(X, y)
 
-# estimate of the first effective dimension reducing direction (EDR)
+# estimate of the first dimension reducing direction
 beta1_hat = save.components_[:, 0]
 
 plt.scatter(X_save[:, 0], y, c=y, cmap='viridis', linewidth=0.5)

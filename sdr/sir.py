@@ -18,7 +18,9 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
     """Sliced Inverse Regression (SIR) [1]
 
     Linear dimensionality reduction using the inverse regression curve,
-    E[X|y], to identify the effective dimension reducing (EDR) directions.
+    E[X|y], to identify the directions defining the central subspace of
+    the data.
+
     The inverse comes from the fact that X and y are reversed with respect
     to the standard regression framework (estimating E[y|X]).
 
@@ -29,11 +31,17 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
     For a binary target the directions found correspond to those found
     with Fisher's Linear Discriminant Analysis (LDA).
 
+    Note that SIR may fail to estimate the directions if the conditional
+    density X|y is symmetric, so that E[X|y] = 0. See
+    :class:`SlicedAverageVarianceEstimation`, which is able to overcome this
+    limitation but may fail to pick up on linear trends. If possible, both
+    SIR and SAVE should be used when analyzing a dataset.
+
     Parameters
     ----------
     n_components : int, None (default=None)
         Number of directions to keep. Corresponds to the dimension of
-        the EDR-space.
+        the central subpace.
 
     n_slices : int (default=10)
         The number of slices used when calculating the inverse regression
@@ -47,9 +55,9 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
     Attributes
     ----------
     components_ : array, shape (n_features, n_components)
-        EDR directions in feature space, representing the EDR-subspace
-        which is sufficient to describe the conditional distribution
-        y|X. The components are sorted by ``eigenvalues_``.
+        The directions in feature space, representing the
+        central subspace which is sufficient to describe the conditional
+        distribution y|X. The components are sorted by ``singular_values_``.
 
     singular_values_ : array, shape (n_components,)
         The singular values corresponding to each of the selected components.
@@ -71,8 +79,9 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
     References
     ----------
 
-    [1] Li, K-C. (1991) "Sliced Inverse Regression for Dimension Reduction", Journal of
-    the American Statistical Association, 86, 316-327.
+    [1] Li, K C. (1991)
+        "Sliced Inverse Regression for Dimension Reduction (with discussion)",
+        Journal of the American Statistical Association, 86, 316-342.
     """
     def __init__(self, n_components=None, n_slices=10, copy=True):
         self.n_components = n_components
@@ -141,7 +150,7 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
     def transform(self, X):
         """Apply dimension reduction on X.
 
-        X is projected onto the EDR-directions previously extracted from a
+        X is projected onto the central subspace  previously extracted from a
         training set.
 
         Parameters
