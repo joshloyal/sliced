@@ -57,7 +57,7 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
 
     >>> import numpy as np
     >>> from sdr import SlicedAverageVarianceEstimation
-    >>> from sdr.datasets import make_cubic
+    >>> from sdr.datasets import make_quadratic
     >>> X, y = make_quadratic(random_state=123)
     >>> save = SlicedAverageVarianceEstimation(n_components=2)
     >>> X_save = save.fit_transform(X, y)
