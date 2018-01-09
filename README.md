@@ -1,4 +1,4 @@
-# `sdr`: Algorithms for sufficient dimension reduction
+# `reduce-learn`: Algorithms for sufficient dimension reduction
 
 Implementations of various algorithms for Sufficient Dimension Reduction (SDR).
 Currently includes the following algorithms:
