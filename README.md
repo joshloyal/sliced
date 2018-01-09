@@ -5,8 +5,6 @@ Currently includes the following algorithms:
 * Sliced Inverse Regression (SIR)
 * Sliced Average Variance Estimation (SAVE)
 
-## Installation and Usage
+## Install
 
-## Examples
-
-## Important Links
+## Getting started
