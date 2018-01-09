@@ -13,7 +13,7 @@ def setup_package():
         version='0.1.0',
         description='Scikit-Learn compatabile Sufficient Dimension Reduction algorithms.',
         author='Joshua D. Loyal',
-        url='https://github.com/joshloyal/SufficientDimensionReduction',
+        url='https://github.com/joshloyal/sufficient-dimension-reduction',
         license='MIT',
         install_requires=['numpy', 'scipy', 'scikit-learn'],
         packages=PACKAGES
