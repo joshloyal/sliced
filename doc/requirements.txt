@@ -1,0 +1,6 @@
+sphinx>=1.4
+numpydoc
+sphinx-gallery
+ipykernel
+nbsphinx
+jupyter-sphinx-theme

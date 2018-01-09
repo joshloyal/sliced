@@ -7,8 +7,11 @@ Major classes are :class:`sir.SlicedInverseRegression` and
 
 Transformers
 ------------
-* :doc:`SlicedInverseRegression`
-* :doc:`SlicedAverageVarianceEstimation`
+.. autosummary::
+    :toctree: generated/
+
+    sir.SlicedInverseRegression
+    save.SlicedAverageVarianceEstimation
 
 
 Datasets
@@ -17,5 +20,18 @@ Datasets
 Datasets used in the examples as well as to test the algorithms are contained in
 the datasets module.
 
-.. automodule:: imreduce.datasets
-    :members:
+.. autosummary::
+    :toctree: generated/
+
+    datasets.make_cubic
+    datasets.make_quadratic
+    datasets.make_polynomial
+
+
+Utilities
+---------
+
+.. autosummary::
+    :toctree: generated/
+
+    base.whiten_X

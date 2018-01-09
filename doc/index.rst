@@ -33,5 +33,6 @@ Methods supported:
    auto_examples/index
    notebooks/sir.ipynb
 
+
 See the `README <https://github.com/joshloyal/SufficientDimensionReduction/blob/master/README.md>`_
 for more information.
