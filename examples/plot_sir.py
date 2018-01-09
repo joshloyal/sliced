@@ -3,18 +3,18 @@
 Sliced Inverse Regression
 =========================
 
-An example plot of :class:`sdr.SlicedInverseRegression`
+An example plot of :class:`rdlearn.SlicedInverseRegression`
 """
 import numpy as np
-import sdr
+import rdlearn
 import matplotlib.pyplot as plt
 
-from sdr import datasets
+from rdlearn import datasets
 
 
 X, y = datasets.make_cubic(random_state=123)
 
-sir = sdr.SlicedInverseRegression()
+sir = rdlearn.SlicedInverseRegression()
 X_sir = sir.fit_transform(X, y)
 
 # estimate of the first dimension reducing directions

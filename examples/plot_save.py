@@ -3,18 +3,18 @@
 Sliced Average Variance Estimation
 ==================================
 
-An example plot of :class:`sdr.SlicedAverageVarianceEstimation`
+An example plot of :class:`rdlearn.SlicedAverageVarianceEstimation`
 """
 import numpy as np
-import sdr
+import rdlearn
 import matplotlib.pyplot as plt
 
-from sdr import datasets
+from rdlearn import datasets
 
 
 X, y = datasets.make_quadratic(random_state=123)
 
-save = sdr.SlicedAverageVarianceEstimation()
+save = rdlearn.SlicedAverageVarianceEstimation()
 X_save = save.fit_transform(X, y)
 
 # estimate of the first dimension reducing direction

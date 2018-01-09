@@ -1,7 +1,7 @@
 import numpy as np
 
-from sdr import SlicedInverseRegression
-from sdr import datasets
+from rdlearn import SlicedInverseRegression
+from rdlearn import datasets
 
 
 def test_sir():

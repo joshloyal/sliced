@@ -1,6 +1,6 @@
 import numpy as np
+import scipy.linalg as linalg
 
-from scipy import linalg
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils import check_array, check_X_y
 from sklearn.utils.validation import check_is_fitted
@@ -8,24 +8,38 @@ from sklearn.utils.validation import check_is_fitted
 from .base import whiten_X, slice_X, is_multioutput
 
 
-__all__ = ['SlicedAverageVarianceEstimation']
+__all__ = ['SlicedInverseRegression']
 
 
-class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
-    """Sliced Average Variance Estimation (SAVE) [1]
+def grouped_sum(array, groups):
+    """Sums an array by groups. Groups are assumed to be contiguous by row."""
+    inv_idx = np.concatenate(([0], np.diff(groups).nonzero()[0]))
+    return np.add.reduceat(array, inv_idx)
 
-    Linear dimensionality reduction using the conditional covariance, Cov(X|y),
-    to identify the directions defining the central subspace of the data.
 
-    The algorithm performs a weighted principal component analysis on a
-    transformation of slices of the covariance matrix of the whitened
-    data, which has been sorted with respect to the target, y.
+class SlicedInverseRegression(BaseEstimator, TransformerMixin):
+    """Sliced Inverse Regression (SIR) [1]
 
-    Since SAVE looks at second moment information, it may miss first-moment
-    information. In particular, it may miss linear trends. See
-    :class:`sdr.sir.SlicedInverseRegression`, which is able to detect
-    linear trends but may fail in other situations. If possible, both SIR and
-    SAVE should be used when analyzing a dataset.
+    Linear dimensionality reduction using the inverse regression curve,
+    E[X|y], to identify the directions defining the central subspace of
+    the data.
+
+    The inverse comes from the fact that X and y are reversed with respect
+    to the standard regression framework (estimating E[y|X]).
+
+    The algorithm performs a weighted principal component analysis on
+    slices of the whitened data, which has been sorted with respect to
+    the target, y.
+
+    For a binary target the directions found correspond to those found
+    with Fisher's Linear Discriminant Analysis (LDA).
+
+    Note that SIR may fail to estimate the directions if the conditional
+    density X|y is symmetric, so that E[X|y] = 0. See
+    :class:`rdlearn.save.SlicedAverageVarianceEstimation`,
+    which is able to overcome this limitation but may fail to pick up on
+    linear trends. If possible, both SIR and SAVE should be used when analyzing
+    a dataset.
 
     Parameters
     ----------
@@ -59,20 +73,19 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
     --------
 
     >>> import numpy as np
-    >>> from sdr import SlicedAverageVarianceEstimation
-    >>> from sdr.datasets import make_quadratic
-    >>> X, y = make_quadratic(random_state=123)
-    >>> save = SlicedAverageVarianceEstimation(n_components=2)
-    >>> X_save = save.fit_transform(X, y)
-    >>> X_save.shape
+    >>> from rdlearn import SlicedInverseRegression
+    >>> from rdlearn.datasets import make_cubic
+    >>> X, y = make_cubic(random_state=123)
+    >>> X_sir = SlicedInverseRegression(n_components=2).fit_transform(X, y)
+    >>> X_sir.shape
     (500, 2)
 
     References
     ----------
 
-    [1] Shao, Y, Cook, RD and Weisberg, S (2007).
-        "Marginal Tests with Sliced Average Variance Estimation",
-        Biometrika, 94, 285-296.
+    [1] Li, K C. (1991)
+        "Sliced Inverse Regression for Dimension Reduction (with discussion)",
+        Journal of the American Statistical Association, 86, 316-342.
     """
     def __init__(self, n_components=None, n_slices=10, copy=True):
         self.n_components = n_components
@@ -118,35 +131,22 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
         else:
             n_slices = self.n_slices
 
-        n_samples, n_features = X.shape
-
         # Center and Whiten feature matrix using the cholesky decomposition
         # (the original implementation uses QR, but this has numeric errors).
         Z, sigma_inv = whiten_X(X, method='cholesky', copy=False)
 
-        # sort rows of Z with respect to the target y
+        # sort rows of Z with respect to y
         Z = Z[np.argsort(y), :]
 
-        # determine slices and counts
+        # determine slice indices and counts per slice
         slices, counts = slice_X(Z, n_slices)
 
-        # construct slice covariance matrices
-        M = np.zeros((n_features, n_features))
-        for slice_idx in range(n_slices):
-            n_slice = counts[slice_idx]
-
-            # center the entries in this slice
-            Z_slice = Z[slices == slice_idx, :]
-            Z_slice -= np.mean(Z_slice, axis=0)
-
-            # slice covariance matrix
-            V_slice = np.dot(Z_slice.T, Z_slice) / (n_slice - 1)
-            M_slice = np.eye(n_features) - V_slice
-            M += (n_slice / n_samples) * np.dot(M_slice, M_slice)
+        # means in each slice (sqrt factor takes care of the weighting)
+        Z_means = grouped_sum(Z, slices) / np.sqrt(counts.reshape(-1,1))
 
         # PCA of slice matrix
-        U, S, V = linalg.svd(M, full_matrices=True)
-        self.components_ = np.dot(V.T, sigma_inv)[:, :self.n_components]
+        U, S, V = linalg.svd(Z_means, full_matrices=True)
+        self.components_ = np.dot(V.T, sigma_inv)[:, :n_components]
         self.singular_values_ = S ** 2
 
         return self
@@ -154,7 +154,7 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
     def transform(self, X):
         """Apply dimension reduction on X.
 
-        X is projected onto the EDR-directions previously extracted from a
+        X is projected onto the central subspace  previously extracted from a
         training set.
 
         Parameters
