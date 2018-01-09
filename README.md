@@ -1,4 +1,4 @@
-# imreduce`: Algorithms for sufficient dimension reduction
+# `imreduce`: Algorithms for sufficient dimension reduction
 
 Implementations of various algorithms for Sufficient Dimension Reduction (SDR).
 Currently includes the following algorithms:
