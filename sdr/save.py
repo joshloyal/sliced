@@ -8,6 +8,9 @@ from sklearn.utils.validation import check_is_fitted
 from .base import whiten_X, slice_X, is_multioutput
 
 
+__all__ = ['SlicedAverageVarianceEstimation']
+
+
 class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
     """Sliced Average Variance Estimation (SAVE) [1]
 
@@ -20,9 +23,9 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
 
     Since SAVE looks at second moment information, it may miss first-moment
     information. In particular, it may miss linear trends. See
-    :class:`SlicedInverseRegression`, which is able to detect linear trends
-    but may fail in other situations. If possible, both SIR and SAVE should
-    be used when analyzing a dataset.
+    :class:`sdr.sir.SlicedInverseRegression`, which is able to detect
+    linear trends but may fail in other situations. If possible, both SIR and
+    SAVE should be used when analyzing a dataset.
 
     Parameters
     ----------

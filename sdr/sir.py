@@ -8,6 +8,9 @@ from sklearn.utils.validation import check_is_fitted
 from .base import whiten_X, slice_X, is_multioutput
 
 
+__all__ = ['SlicedInverseRegression']
+
+
 def grouped_sum(array, groups):
     """Sums an array by groups. Groups are assumed to be contiguous by row."""
     inv_idx = np.concatenate(([0], np.diff(groups).nonzero()[0]))
@@ -33,9 +36,10 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
 
     Note that SIR may fail to estimate the directions if the conditional
     density X|y is symmetric, so that E[X|y] = 0. See
-    :class:`SlicedAverageVarianceEstimation`, which is able to overcome this
-    limitation but may fail to pick up on linear trends. If possible, both
-    SIR and SAVE should be used when analyzing a dataset.
+    :class:`sdr.save.SlicedAverageVarianceEstimation`,
+    which is able to overcome this limitation but may fail to pick up on
+    linear trends. If possible, both SIR and SAVE should be used when analyzing
+    a dataset.
 
     Parameters
     ----------
