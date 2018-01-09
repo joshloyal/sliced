@@ -23,7 +23,7 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
 
     Since SAVE looks at second moment information, it may miss first-moment
     information. In particular, it may miss linear trends. See
-    :class:`rdlearn.sir.SlicedInverseRegression`, which is able to detect
+    :class:`imreduce.sir.SlicedInverseRegression`, which is able to detect
     linear trends but may fail in other situations. If possible, both SIR and
     SAVE should be used when analyzing a dataset.
 
@@ -59,8 +59,8 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
     --------
 
     >>> import numpy as np
-    >>> from rdlearn import SlicedAverageVarianceEstimation
-    >>> from rdlearn.datasets import make_quadratic
+    >>> from imreduce import SlicedAverageVarianceEstimation
+    >>> from imreduce.datasets import make_quadratic
     >>> X, y = make_quadratic(random_state=123)
     >>> save = SlicedAverageVarianceEstimation(n_components=2)
     >>> X_save = save.fit_transform(X, y)

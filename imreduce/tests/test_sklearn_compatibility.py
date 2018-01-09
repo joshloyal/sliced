@@ -1,6 +1,6 @@
 from sklearn.utils.estimator_checks import check_estimator
 
-from rdlearn import SlicedInverseRegression, SlicedAverageVarianceEstimation
+from imreduce import SlicedInverseRegression, SlicedAverageVarianceEstimation
 
 
 def test_sir():

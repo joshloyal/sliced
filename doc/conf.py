@@ -15,7 +15,8 @@
 import sys
 import os
 
-import sphinx_rtd_theme
+from jupyter_sphinx_theme import *
+init_theme()
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -43,6 +44,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'numpydoc',
+    'nbsphinx',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx_gallery.gen_gallery'
@@ -80,7 +82,7 @@ plot_gallery = True
 master_doc = 'index'
 
 # General information about the project.
-project = u'reduce-learn'
+project = u'imreduce'
 copyright = u'2017, Joshua Loyal'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -104,7 +106,7 @@ release = '0.1.0'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build']
+exclude_patterns = ['_build', '**.ipynb_checkpoints']
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -135,15 +137,15 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'sphinx_rtd_theme'
+#html_theme = 'jupyter'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#html_theme_options = {}
+#html_theme_options = {'showheader': False}
 
 # Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+#html_theme_path = jupyter_sphinx_theme.get_html_theme_path()
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -180,7 +182,7 @@ html_static_path = ['_static']
 #html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
-#html_sidebars = {}
+html_sidebars = {'**': ['sidebartoc.html']}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
@@ -213,7 +215,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'project-templatedoc'
+htmlhelp_basename = 'reduce-learndoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -233,8 +235,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'project-template.tex', u'project-template Documentation',
-   u'Vighnesh Birodkar', 'manual'),
+  ('index', 'reduce-learn.tex', u'reduce-learn Documentation',
+   u'Joshua Loyal', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

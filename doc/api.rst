@@ -1,7 +1,7 @@
-.. currentmodule:: rdlearn
+.. currentmodule:: imreduce
 
-reduce-learn API
-================
+imreduce API
+============
 Major classes are :class:`sir.SlicedInverseRegression` and
 :class:`save.SlicedAverageVarianceEstimation`.
 
@@ -17,5 +17,5 @@ Datasets
 Datasets used in the examples as well as to test the algorithms are contained in
 the datasets module.
 
-.. automodule:: rdlearn.datasets
+.. automodule:: imreduce.datasets
     :members:

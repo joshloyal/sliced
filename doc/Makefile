@@ -51,8 +51,9 @@ clean:
 	-rm -rf auto_examples/
 	-rm -rf generated/*
 	-rm -rf modules/generated/*
+	-rm -rf notebooks/*
 
-html:
+html: notebook
 	# These two lines make the build a bit more lengthy, and the
 	# the embedding of images more robust
 	rm -rf $(BUILDDIR)/html/_images
@@ -60,6 +61,10 @@ html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
+
+notebook:
+	mkdir -p notebooks
+	cp -r ../notebooks/* notebooks
 
 dirhtml:
 	$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml

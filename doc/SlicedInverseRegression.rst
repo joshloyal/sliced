@@ -1,5 +1,5 @@
 Sliced Inverse Regression
 =========================
 
-.. autoclass:: rdlearn.sir.SlicedInverseRegression
+.. autoclass:: imreduce.sir.SlicedInverseRegression
     :members:

@@ -36,7 +36,7 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
 
     Note that SIR may fail to estimate the directions if the conditional
     density X|y is symmetric, so that E[X|y] = 0. See
-    :class:`rdlearn.save.SlicedAverageVarianceEstimation`,
+    :class:`imreduce.save.SlicedAverageVarianceEstimation`,
     which is able to overcome this limitation but may fail to pick up on
     linear trends. If possible, both SIR and SAVE should be used when analyzing
     a dataset.
@@ -73,8 +73,8 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
     --------
 
     >>> import numpy as np
-    >>> from rdlearn import SlicedInverseRegression
-    >>> from rdlearn.datasets import make_cubic
+    >>> from imreduce import SlicedInverseRegression
+    >>> from imreduce.datasets import make_cubic
     >>> X, y = make_cubic(random_state=123)
     >>> X_sir = SlicedInverseRegression(n_components=2).fit_transform(X, y)
     >>> X_sir.shape

@@ -3,10 +3,11 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to reduce-learn's documentation!
-========================================
+inverse-moment-reductions
+=========================
 
-The reduce-learn package is a library for sufficient dimension reduction in Python.
+The invserse-moment-reduction package is a library for sufficient dimension reduction
+using inverse moment methods in Python.
 
 Highlights:
 
@@ -30,6 +31,7 @@ Methods supported:
    :caption: Tutorial - Examples
 
    auto_examples/index
+   notebooks/sir.ipynb
 
 See the `README <https://github.com/joshloyal/SufficientDimensionReduction/blob/master/README.md>`_
 for more information.

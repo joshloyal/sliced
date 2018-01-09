@@ -1,6 +1,6 @@
 import numpy as np
 
-from rdlearn.base import whiten_X
+from imreduce.base import whiten_X
 
 
 rng = np.random.RandomState(123)

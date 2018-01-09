@@ -1,7 +1,7 @@
 import numpy as np
 
-from rdlearn import SlicedAverageVarianceEstimation
-from rdlearn import datasets
+from imreduce import SlicedAverageVarianceEstimation
+from imreduce import datasets
 
 
 def test_save_cubic():

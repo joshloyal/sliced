@@ -1,5 +1,5 @@
 Sliced Average Variance Estimation
 ==================================
 
-.. autoclass:: rdlearn.save.SlicedAverageVarianceEstimation
+.. autoclass:: imreduce.save.SlicedAverageVarianceEstimation
     :members:

@@ -2,18 +2,18 @@ from setuptools import setup
 
 
 PACKAGES = [
-    'rdlearn',
-    'rdlearn.tests',
+    'imreduce',
+    'imreduce.tests',
 ]
 
 
 def setup_package():
     setup(
-        name="reduce-learn",
+        name="inverse-moment-reductions",
         version='0.1.0',
         description='Scikit-Learn compatabile Sufficient Dimension Reduction algorithms.',
         author='Joshua D. Loyal',
-        url='https://github.com/joshloyal/reduce-learn',
+        url='https://github.com/joshloyal/inverse-moment-reductions',
         license='MIT',
         install_requires=['numpy', 'scipy', 'scikit-learn'],
         packages=PACKAGES

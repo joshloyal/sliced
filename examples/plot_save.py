@@ -3,18 +3,18 @@
 Sliced Average Variance Estimation
 ==================================
 
-An example plot of :class:`rdlearn.SlicedAverageVarianceEstimation`
+An example plot of :class:`imreduce.save.SlicedAverageVarianceEstimation`
 """
 import numpy as np
-import rdlearn
 import matplotlib.pyplot as plt
 
-from rdlearn import datasets
+from imreduce import SlicedAverageVarianceEstimation
+from imreduce import datasets
 
 
 X, y = datasets.make_quadratic(random_state=123)
 
-save = rdlearn.SlicedAverageVarianceEstimation()
+save = SlicedAverageVarianceEstimation()
 X_save = save.fit_transform(X, y)
 
 # estimate of the first dimension reducing direction
