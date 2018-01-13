@@ -10,7 +10,7 @@ def test_save_cubic():
     save = SlicedAverageVarianceEstimation().fit(X, y)
 
     true_beta = (1 / np.sqrt(2)) * np.hstack((np.ones(2), np.zeros(8)))
-    angle = np.dot(true_beta, save.components_[:, 0])
+    angle = np.dot(true_beta, save.components_[0, :])
     np.testing.assert_allclose(np.abs(angle), 1, rtol=1e-1)
 
 
@@ -20,5 +20,5 @@ def test_save_quadratic():
     save = SlicedAverageVarianceEstimation().fit(X, y)
 
     true_beta = (1 / np.sqrt(2)) * np.hstack((np.ones(2), np.zeros(8)))
-    angle = np.dot(true_beta, save.components_[:, 0])
+    angle = np.dot(true_beta, save.components_[0, :])
     np.testing.assert_allclose(np.abs(angle), 1, rtol=1e-2)
