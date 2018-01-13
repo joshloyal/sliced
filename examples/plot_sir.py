@@ -18,7 +18,7 @@ sir = SlicedInverseRegression()
 X_sir = sir.fit_transform(X, y)
 
 # estimate of the first dimension reducing directions
-beta1_hat = sir.components_[:, 0]
+beta1_hat = sir.components_[0, :]
 
 
 # plot data projected onto the first direction

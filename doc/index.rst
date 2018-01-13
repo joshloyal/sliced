@@ -23,6 +23,7 @@ Methods supported:
    :hidden:
    :caption: Documentation
 
+   notebooks/introduction.ipynb
    api
 
 .. toctree::
@@ -30,8 +31,8 @@ Methods supported:
    :hidden:
    :caption: Tutorial - Examples
 
-   auto_examples/index
    notebooks/sir.ipynb
+   auto_examples/index
 
 
 See the `README <https://github.com/joshloyal/SufficientDimensionReduction/blob/master/README.md>`_

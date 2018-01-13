@@ -58,7 +58,7 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
 
     Attributes
     ----------
-    components_ : array, shape (n_features, n_components)
+    components_ : array, shape (n_components, n_features)
         The directions in feature space, representing the
         central subspace which is sufficient to describe the conditional
         distribution y|X. The components are sorted by ``singular_values_``.
@@ -146,7 +146,7 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
 
         # PCA of slice matrix
         U, S, V = linalg.svd(Z_means, full_matrices=True)
-        self.components_ = np.dot(V.T, sigma_inv)[:, :n_components]
+        self.components_ = np.dot(V.T, sigma_inv)[:, :n_components].T
         self.singular_values_ = S ** 2
 
         return self
@@ -172,4 +172,4 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
         check_is_fitted(self, 'components_')
 
         X = check_array(X)
-        return np.dot(X, self.components_)
+        return np.dot(X, self.components_.T)
