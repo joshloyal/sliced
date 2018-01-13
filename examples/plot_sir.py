@@ -22,7 +22,7 @@ beta1_hat = sir.components_[0, :]
 
 
 # plot data projected onto the first direction
-plt.scatter(X_sir[:, 0], y, c=y, cmap='viridis', linewidth=0.5)
+plt.scatter(X_sir[:, 0], y, c=y, cmap='viridis', linewidth=0.5, edgecolor='k')
 plt.xlabel("$X\hat{\\beta_1}$")
 plt.ylabel("y")
 
