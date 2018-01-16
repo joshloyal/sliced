@@ -146,7 +146,7 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
         # construct slice covariance matrices
         M = np.zeros((n_features, n_features))
         for slice_idx in range(self.n_slices_):
-            n_slice = counts[slice_idx]
+            n_slice = float(counts[slice_idx])
 
             # center the entries in this slice
             Z_slice = Z[slices == slice_idx, :]
