@@ -1,6 +1,9 @@
-import numpy as np
+import warnings
 
-from scipy import linalg
+import numpy as np
+import scipy.linalg as linalg
+
+from scipy import sparse
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils import check_array, check_X_y
 from sklearn.utils.validation import check_is_fitted
@@ -97,14 +100,18 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
         self : object
             Returns the instance itself.
         """
+        if sparse.issparse(X):
+            raise TypeError("SlicedInverseRegression does not support "
+                            "sparse input.")
+
         X, y = check_X_y(X, y, dtype=[np.float64, np.float32],
                          y_numeric=True, copy=self.copy)
 
         # handle n_components == None
         if self.n_components is None:
-            n_components = X.shape[1]
+            self.n_components_ = X.shape[1]
         else:
-            n_components = self.n_components
+            self.n_components_ = self.n_components
 
         # validate y
         if is_multioutput(y):
@@ -113,10 +120,16 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
         # `n_slices` must be less-than or equal to the number of unique values
         # of `y`.
         n_y_values = np.unique(y).shape[0]
+        if n_y_values == 1:
+            raise ValueError("The target only has one unique y value. It does "
+                             "not make sense to fit SIR in this case.")
+
         if self.n_slices > n_y_values:
-            n_slices = n_y_values
+            warnings.warn("n_slices greater than number of unique y values. "
+                          "Setting n_slices equal to {0}.".format(n_y_values))
+            self.n_slices_ = n_y_values
         else:
-            n_slices = self.n_slices
+            self.n_slices_ = self.n_slices
 
         n_samples, n_features = X.shape
 
@@ -128,11 +141,11 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
         Z = Z[np.argsort(y), :]
 
         # determine slices and counts
-        slices, counts = slice_X(Z, n_slices)
+        slices, counts = slice_X(Z, self.n_slices_)
 
         # construct slice covariance matrices
         M = np.zeros((n_features, n_features))
-        for slice_idx in range(n_slices):
+        for slice_idx in range(self.n_slices_):
             n_slice = counts[slice_idx]
 
             # center the entries in this slice
@@ -146,7 +159,7 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
 
         # PCA of slice matrix
         U, S, V = linalg.svd(M, full_matrices=True)
-        self.components_ = np.dot(V.T, sigma_inv)[:, :self.n_components].T
+        self.components_ = np.dot(V.T, sigma_inv)[:, :self.n_components_].T
         self.singular_values_ = S ** 2
 
         return self
