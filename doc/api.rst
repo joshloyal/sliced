@@ -1,7 +1,7 @@
-.. currentmodule:: imreduce
+.. currentmodule:: sliced
 
-imreduce API
-============
+sliced API
+==========
 Major classes are :class:`sir.SlicedInverseRegression` and
 :class:`save.SlicedAverageVarianceEstimation`.
 

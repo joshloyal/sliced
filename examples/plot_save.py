@@ -3,13 +3,13 @@
 Sliced Average Variance Estimation
 ==================================
 
-An example plot of :class:`imreduce.save.SlicedAverageVarianceEstimation`
+An example plot of :class:`sliced.save.SlicedAverageVarianceEstimation`
 """
 import numpy as np
 import matplotlib.pyplot as plt
 
-from imreduce import SlicedAverageVarianceEstimation
-from imreduce import datasets
+from sliced import SlicedAverageVarianceEstimation
+from sliced import datasets
 
 
 X, y = datasets.make_quadratic(random_state=123)

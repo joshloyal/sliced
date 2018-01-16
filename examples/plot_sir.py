@@ -3,13 +3,13 @@
 Sliced Inverse Regression
 =========================
 
-An example plot of :class:`imreduce.sir.SlicedInverseRegression`
+An example plot of :class:`sliced.sir.SlicedInverseRegression`
 """
 import numpy as np
 import matplotlib.pyplot as plt
 
-from imreduce import SlicedInverseRegression
-from imreduce import datasets
+from sliced import SlicedInverseRegression
+from sliced import datasets
 
 
 X, y = datasets.make_cubic(random_state=123)
