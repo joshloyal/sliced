@@ -72,7 +72,7 @@ def make_cubic(n_samples=500, n_features=10, n_informative=2,
 
 
 def make_quadratic(n_samples=500, n_features=10, n_informative=2,
-               random_state=None):
+                   random_state=None):
     """Generates a dataset with a quadratic response curve.
 
     Inputs X are independent normally distributed features. The output y

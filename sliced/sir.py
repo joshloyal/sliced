@@ -157,7 +157,7 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
         slices, counts = slice_X(Z, self.n_slices_)
 
         # means in each slice (sqrt factor takes care of the weighting)
-        Z_means = grouped_sum(Z, slices) / np.sqrt(counts.reshape(-1,1))
+        Z_means = grouped_sum(Z, slices) / np.sqrt(counts.reshape(-1, 1))
 
         # PCA of slice matrix
         U, S, V = linalg.svd(Z_means, full_matrices=True)

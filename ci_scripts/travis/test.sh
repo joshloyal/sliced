@@ -7,7 +7,7 @@ mkdir -p $TEST_DIR
 cd $TEST_DIR
 
 if [[ "$COVERAGE" == "true" ]]; then
-    nosetests -s --with-coverage --cover-package=$MODULE $MODULE
+    py.test --cov=sliced --pep8 -p no:warnings --pep8
 else
     py.test -vs $MODULE
 fi

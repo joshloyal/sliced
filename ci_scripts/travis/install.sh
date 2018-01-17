@@ -24,7 +24,8 @@ popd
 
 # Configure the conda environment and put it in the path using the
 # provided versions
-conda create -n testenv --yes python=$PYTHON_VERSION pip nose pytest \
+conda create -n testenv --yes python=$PYTHON_VERSION pip \
+      pep8 nose pytest pytest-pep8 pytest-xdist \
       numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION cython=$CYTHON_VERSION
 
 source activate testenv
@@ -32,6 +33,7 @@ source activate testenv
 
 if [[ "$COVERAGE" == "true" ]]; then
     pip install coverage coveralls
+    pip install pytest-cov
 fi
 
 python --version
