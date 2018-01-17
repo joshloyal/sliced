@@ -49,7 +49,6 @@ setup(
     extras_require={'test': TEST_REQUIRES},
     setup_requires=['pytest-runner'],
     tests_require=TEST_REQUIRES,
-    test_suite='py.test',
     url='https://github.com/joshloyal/sliced',
     license='MIT',
 )
