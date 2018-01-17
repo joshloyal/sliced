@@ -33,6 +33,7 @@ source activate testenv
 
 if [[ "$COVERAGE" == "true" ]]; then
     pip install coverage coveralls
+    pip install python-coveralls
     pip install pytest-cov
 fi
 
