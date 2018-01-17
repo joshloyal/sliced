@@ -19,6 +19,7 @@ with open('requirements.txt') as f:
 TEST_REQUIRES = [
     'pytest',
     'pytest-pep8',
+    'pytest-cov',
     'nose>=1.1.2'
 ]
 
