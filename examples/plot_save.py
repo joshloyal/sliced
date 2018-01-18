@@ -31,4 +31,5 @@ beta1_hat_text = "$\hat{\\beta_1}$ = " + "{0}".format(
     np.round(beta1_hat, 3).tolist()[:2])
 plt.annotate(beta1_hat_text, xy=(-1, 1.75))
 
-plt.show()
+if __name__ == '__main__':
+    plt.show()

@@ -1,3 +1,8 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+
 import warnings
 
 import numpy as np
@@ -62,8 +67,8 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
     --------
 
     >>> import numpy as np
-    >>> from imreduce import SlicedAverageVarianceEstimation
-    >>> from imreduce.datasets import make_quadratic
+    >>> from sliced import SlicedAverageVarianceEstimation
+    >>> from sliced.datasets import make_quadratic
     >>> X, y = make_quadratic(random_state=123)
     >>> save = SlicedAverageVarianceEstimation(n_components=2)
     >>> X_save = save.fit_transform(X, y)
@@ -146,7 +151,7 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
         # construct slice covariance matrices
         M = np.zeros((n_features, n_features))
         for slice_idx in range(self.n_slices_):
-            n_slice = float(counts[slice_idx])
+            n_slice = counts[slice_idx]
 
             # center the entries in this slice
             Z_slice = Z[slices == slice_idx, :]

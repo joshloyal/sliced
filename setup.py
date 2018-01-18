@@ -16,12 +16,8 @@ with open('requirements.txt') as f:
     INSTALL_REQUIRES = [l.strip() for l in f.readlines() if l]
 
 
-TEST_REQUIRES = [
-    'pytest',
-    'pytest-pep8',
-    'pytest-cov',
-    'nose>=1.1.2'
-]
+with open('test_requirements.txt') as f:
+    TEST_REQUIRES = [l.strip() for l in f.readlines() if l]
 
 
 try:

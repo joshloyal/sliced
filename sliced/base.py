@@ -1,3 +1,8 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+
 import numpy as np
 import scipy.linalg as linalg
 
@@ -46,7 +51,7 @@ def slice_X(X, n_slices):
     n_samples = X.shape[0]
 
     slices = np.repeat(np.arange(n_slices),
-                       np.ceil(n_samples / float(n_slices)))[:n_samples]
+                       np.ceil(n_samples / n_slices))[:n_samples]
     counts = np.bincount(slices)
 
     return slices, counts

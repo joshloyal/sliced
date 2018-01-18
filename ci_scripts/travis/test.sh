@@ -3,11 +3,11 @@ set -e
 # Get into a temp directory to run test from the installed scikit learn and
 # check if we do not leave artifacts
 mkdir -p $TEST_DIR
-
+cp setup.cfg $TEST_DIR
 cd $TEST_DIR
 
 if [[ "$COVERAGE" == "true" ]]; then
-    py.test -vs --cov=$MODULE --pep8 -p no:warnings --pep8 --pyargs $MODULE
+    pytest --cov=$MODULE --pep8 --pyargs
 else
-    py.test -vs $MODULE
+    pytest --pep8 --pyargs
 fi
