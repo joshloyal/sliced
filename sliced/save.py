@@ -31,7 +31,7 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
 
     Since SAVE looks at second moment information, it may miss first-moment
     information. In particular, it may miss linear trends. See
-    :class:`imreduce.sir.SlicedInverseRegression`, which is able to detect
+    :class:`sliced.sir.SlicedInverseRegression`, which is able to detect
     linear trends but may fail in other situations. If possible, both SIR and
     SAVE should be used when analyzing a dataset.
 
