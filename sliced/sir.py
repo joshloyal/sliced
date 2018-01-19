@@ -89,8 +89,6 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
     >>> sir.fit(X, y)
     SlicedInverseRegression(copy=True, n_components=2, n_slices=10)
     >>> X_sir = sir.transform(X)
-    >>> print(X_sir.shape)
-    (500, 2)
 
     References
     ----------

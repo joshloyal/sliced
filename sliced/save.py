@@ -74,8 +74,6 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
     >>> save.fit(X, y)
     SlicedAverageVarianceEstimation(copy=True, n_components=2, n_slices=10)
     >>> X_save = save.transform(X)
-    >>> print(X_save.shape)
-    (500, 2)
 
     References
     ----------
