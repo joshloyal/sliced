@@ -88,8 +88,8 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
     >>> sir = SlicedInverseRegression(n_components=2)
     >>> sir.fit(X, y)
     SlicedInverseRegression(copy=True, n_components=2, n_slices=10)
-    >>> print(sir.singular_values_)  # doctest: +ELLIPSIS
-    [ 303.2707... 23.9213...]
+    >>> sir.singular_values_  # doctest: +ELLIPSIS
+    array([ 303.2707... 23.9213...])
     >>> X_sir = sir.transform(X)
     >>> print(X_sir.shape)
     (500, 2)
