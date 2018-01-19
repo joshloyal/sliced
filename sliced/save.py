@@ -71,8 +71,12 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
     >>> from sliced.datasets import make_quadratic
     >>> X, y = make_quadratic(random_state=123)
     >>> save = SlicedAverageVarianceEstimation(n_components=2)
-    >>> X_save = save.fit_transform(X, y)
-    >>> X_save.shape
+    >>> save.fit(X, y)  # doctest: +NORMALIZE_WHITESPACE
+    SlicedAverageVarianceEstimation(copy=True, n_components=2, n_slices=10)
+    >>> print(save.singular_values_)  # doctest: +ELLIPSIS
+    [ 2.3089... 0.080...]
+    >>> X_save = save.transform(X)
+    >>> print(X_save.shape)
     (500, 2)
 
     References
@@ -165,7 +169,7 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
         # PCA of slice matrix
         U, S, V = linalg.svd(M, full_matrices=True)
         self.components_ = np.dot(V.T, sigma_inv)[:, :self.n_components_].T
-        self.singular_values_ = S ** 2
+        self.singular_values_ = (S ** 2)[:self.n_components_]
 
         return self
 
