@@ -86,10 +86,10 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
     >>> from sliced.datasets import make_cubic
     >>> X, y = make_cubic(random_state=123)
     >>> sir = SlicedInverseRegression(n_components=2)
-    >>> sir.fit(X, y)  # doctest: +NORMALIZE_WHITESPACE
+    >>> sir.fit(X, y)
     SlicedInverseRegression(copy=True, n_components=2, n_slices=10)
     >>> print(sir.singular_values_)  # doctest: +ELLIPSIS
-    [ 303.270... 23.921...]
+    [ 303.2707... 23.9213...]
     >>> X_sir = sir.transform(X)
     >>> print(X_sir.shape)
     (500, 2)

@@ -71,10 +71,10 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
     >>> from sliced.datasets import make_quadratic
     >>> X, y = make_quadratic(random_state=123)
     >>> save = SlicedAverageVarianceEstimation(n_components=2)
-    >>> save.fit(X, y)  # doctest: +NORMALIZE_WHITESPACE
+    >>> save.fit(X, y)
     SlicedAverageVarianceEstimation(copy=True, n_components=2, n_slices=10)
     >>> print(save.singular_values_)  # doctest: +ELLIPSIS
-    [ 2.3089... 0.080...]
+    [ 2.3089... 0.0807...]
     >>> X_save = save.transform(X)
     >>> print(X_save.shape)
     (500, 2)
