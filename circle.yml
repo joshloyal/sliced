@@ -23,14 +23,14 @@ dependencies:
     - sudo apt-get install build-essential python3-dev python3-setuptools
     - sudo apt-get install pandoc
     # install numpy first as it is a compile time dependency for other packages
-    - pip3 install --upgrade numpy
-    - pip3 install --upgrade scipy matplotlib setuptools nose coverage sphinx pillow sphinx-gallery sphinx_rtd_theme
+    - pip install --upgrade numpy
+    - pip install --upgrade scipy matplotlib setuptools nose coverage sphinx pillow sphinx-gallery sphinx_rtd_theme
     # Installing required packages for `make -C doc check command` to work.
     - sudo -E apt-get -yq update
     - sudo -E apt-get -yq --no-install-suggests --no-install-recommends --force-yes install dvipng texlive-latex-base texlive-latex-extra
-    - pip3 install --upgrade cython numpydoc
-    - pip3 install --upgrade scikit-learn
-    - pip3 install -r doc/requirements.txt
+    - pip install --upgrade cython numpydoc
+    - pip install --upgrade scikit-learn
+    - pip install -r doc/requirements.txt
 
   # The --user is needed to let sphinx see the source and the binaries
   # The pipefail is requested to propagate exit code
