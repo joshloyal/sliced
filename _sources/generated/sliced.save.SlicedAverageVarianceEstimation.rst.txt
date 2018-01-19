@@ -1,0 +1,27 @@
+sliced\.save\.SlicedAverageVarianceEstimation
+=============================================
+
+.. currentmodule:: sliced.save
+
+.. autoclass:: SlicedAverageVarianceEstimation
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SlicedAverageVarianceEstimation.__init__
+      ~SlicedAverageVarianceEstimation.fit
+      ~SlicedAverageVarianceEstimation.fit_transform
+      ~SlicedAverageVarianceEstimation.get_params
+      ~SlicedAverageVarianceEstimation.set_params
+      ~SlicedAverageVarianceEstimation.transform
+   
+   
+
+   
+   
+   

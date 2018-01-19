@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Introduction to sliced &#8212; sliced 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+<div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="../index.html">
+        sliced</a>
+      <span class="navbar-text navbar-version pull-left"><b>0.1</b></span>
+    </div>
+
+      <div class="collapse navbar-collapse nav-collapse">
+        <ul class="nav navbar-nav">
+          
+          
+          
+          
+        </ul>
+
+        
+          
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        
+        
+          
+            <ul class='nav navbar-nav navbar-right'>
+                
+            </ul>
+          
+        
+      </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">sliced API</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial - Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="col-md-9 content">
+      
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 9ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+</style>
+<div class="section" id="Introduction-to-sliced">
+<h1>Introduction to <code class="docutils literal"><span class="pre">sliced</span></code><a class="headerlink" href="#Introduction-to-sliced" title="Permalink to this headline">¶</a></h1>
+<p>Joshua Loyal, January 2018</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="k">import</span> <span class="n">Axes3D</span>
+<span class="kn">from</span> <span class="nn">plotting_utils</span> <span class="k">import</span> <span class="n">label_line</span><span class="p">,</span> <span class="n">label_component</span><span class="p">,</span> <span class="n">abline</span>
+<span class="kn">from</span> <span class="nn">loyalpy.annotations</span> <span class="k">import</span> <span class="n">label_abline</span>
+<span class="kn">from</span> <span class="nn">plotting_utils</span> <span class="k">import</span> <span class="n">Arrow3D</span>
+
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p><code class="docutils literal"><span class="pre">sliced</span></code> is a library for sufficient dimension reduction (SDR) using
+inverse moment methods. This is not a common technique, but can be a
+powerful tool in the right situation. This document is designed to
+introduce the concept of SDR to those familiary with other more common
+unsupervised dimension reduction techniques like Principal Component
+Analysis (PCA). When following along it will be helpful to keep
+Principal Component Analysis (PCA) in mind. While PCA is not an SDR
+technique, it serves the same purpose: to reduce the number of features
+in a dataset.</p>
+<p>We’ll start with a brief introduction to sufficient dimension reduction.
+This section elaborates on the purpose of SDR as well as in what
+situations it should be used. Following this introduction is a
+comparison of PCA with Sliced Inverse Regression (SIR). SIR is an
+inverse moment method that results in sufficient dimension reduction.
+The implementation of which is found in the <code class="docutils literal"><span class="pre">sliced</span></code> package.</p>
+</div>
+<div class="section" id="What-is-Sufficient-Dimension-Reduction?">
+<h1>What is Sufficient Dimension Reduction?<a class="headerlink" href="#What-is-Sufficient-Dimension-Reduction?" title="Permalink to this headline">¶</a></h1>
+<p>Let’s say we have some data, and we want to predict some feature,
+<img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/>, using a collection of other features, <img class="math" src="../_images/math/c20f7f9210a91b8aeba2e85d2bcb23e29bcab3f4.png" alt="\mathbf{X}"/>. In
+other words, we want to gain some insight about the conditional
+distribution <img class="math" src="../_images/math/9509daae221aff4bb7cd051f8f60ba6ed1fd6185.png" alt="y|\mathbf{X}"/>. However, when the number of features
+is high, it is common to remove irrelavent features before moving onto
+the prediction step. This removal of features is what is meant by
+dimension reduction. We are <em>reducing</em> the number of columns (aka
+<em>dimensions</em>) in our dataset.</p>
+<p>Those familiar with dimension reduction may be thinking: “<em>I’ll use PCA
+or t-SNE for this!</em>”. While these techniques are great, they fall
+under the category of <em>unsupervised</em> dimension reduction. Notice that
+the unsupervised setup is very different than the situation described
+above. In unsupervised learning we are only concerned with the
+distribution of <img class="math" src="../_images/math/c20f7f9210a91b8aeba2e85d2bcb23e29bcab3f4.png" alt="\mathbf{X}"/> itself. No y involved. For example,
+PCA would reduce the number of features by identifying a small set of
+directions that explains the greatest variation in the data. This set of
+directions is known as a subspace. However, there is no reason to
+believe that this subspace contains any information about the
+relationship between <img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/> and <img class="math" src="../_images/math/c20f7f9210a91b8aeba2e85d2bcb23e29bcab3f4.png" alt="\mathbf{X}"/>. Information about
+<img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/> could be orthogonal to this space. This is because PCA did not
+use information about <img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/> when determining the directions of
+variation.</p>
+<p>In order to avoid the situation above, <strong>sufficient dimension
+reduction</strong> is all about keeping the relationship between
+<img class="math" src="../_images/math/c20f7f9210a91b8aeba2e85d2bcb23e29bcab3f4.png" alt="\mathbf{X}"/> and <img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/> in mind. The goal is to find a small
+set of directions that can replace <img class="math" src="../_images/math/c20f7f9210a91b8aeba2e85d2bcb23e29bcab3f4.png" alt="\mathbf{X}"/> without loss of
+information on the conditional distribution <img class="math" src="../_images/math/9509daae221aff4bb7cd051f8f60ba6ed1fd6185.png" alt="y|\mathbf{X}"/>. This
+special subspace is called the <strong>central subspace</strong>, and is labeled with
+the symbol <img class="math" src="../_images/math/d54f5ad423cfb4371b4f30de565f5bd0031458c9.png" alt="S(\mathbf{X})"/>. In other words, if we restrict out
+attention to this smaller subspace, <img class="math" src="../_images/math/d54f5ad423cfb4371b4f30de565f5bd0031458c9.png" alt="S(\mathbf{X})"/>, we would find
+that the conditional distribution <img class="math" src="../_images/math/8086bcc3da0a89b25265a549b43aa542002327f2.png" alt="y|S(\mathbf{X})"/> is the same as
+the distribution <img class="math" src="../_images/math/9509daae221aff4bb7cd051f8f60ba6ed1fd6185.png" alt="y|\mathbf{X}"/>. But we now have a much smaller
+set of features! This would allow us to better visualize our data and
+possibly gain deeper insights.</p>
+<div class="section" id="Example:-Surfaces-in-3D">
+<h2>Example: Surfaces in 3D<a class="headerlink" href="#Example:-Surfaces-in-3D" title="Permalink to this headline">¶</a></h2>
+<p>Let’s focus on a concrete example: A surface in three-dimensions. In
+this case, we have two features <img class="math" src="../_images/math/fdf6501bec5987984965f15d09235c645fe06ccb.png" alt="x_1"/> and <img class="math" src="../_images/math/1f1a225cd22b81817fc48b3a84dcf8f1a9e145d8.png" alt="x_2"/> that live on
+a plane in 2-dimensions. In addition, each pair of points,
+<img class="math" src="../_images/math/18c4968d888f05cd39284e10773cf5e63d534d30.png" alt="(x_1, x_2)"/>, is associated with the height of the surface,
+<img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/>, that lies above it. In this example, we will focus on a
+parabolic surface: <img class="math" src="../_images/math/7646e3a5f67016051f9fa23a82c16bcc646cb2be.png" alt="y = x_1^2"/>. In terms of features and targets,
+we have a dataset of two features, (<img class="math" src="../_images/math/fdf6501bec5987984965f15d09235c645fe06ccb.png" alt="x_1"/>, <img class="math" src="../_images/math/1f1a225cd22b81817fc48b3a84dcf8f1a9e145d8.png" alt="x_2"/>), and the
+target is the height of the surface, <img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/>.</p>
+<p>What are the possible subspaces associated with this dataset? They are
+subspaces of the <img class="math" src="../_images/math/38750fe557cbfad7ae8c2771e7779bc39cf67a0d.png" alt="x_1x_2"/>-plane. This is a plane in
+two-dimensions. The subspaces of this plane correspond to all
+one-dimensional lines in the plane. A few examples are displayed below:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># plot lines in the plane</span>
+<span class="n">ablines</span> <span class="o">=</span> <span class="p">[([</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">]),</span>
+           <span class="p">([</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+           <span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">]),</span>
+           <span class="p">([</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">])]</span>
+<span class="k">for</span> <span class="n">a_coords</span><span class="p">,</span> <span class="n">b_coords</span> <span class="ow">in</span> <span class="n">ablines</span><span class="p">:</span>
+    <span class="n">abline</span><span class="p">(</span><span class="n">a_coords</span><span class="p">,</span> <span class="n">b_coords</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># labels</span>
+<span class="n">label_abline</span><span class="p">([</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">],</span> <span class="s1">&#39;$\hat{</span><span class="se">\\</span><span class="s1">beta}$ = (1, -1)&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)</span>
+<span class="n">label_abline</span><span class="p">([</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="s1">&#39;$\hat{</span><span class="se">\\</span><span class="s1">beta}$ = (1, 1)&#39;</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.7</span><span class="p">)</span>
+<span class="n">label_abline</span><span class="p">([</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s1">&#39; $x_1$-axis: $\hat{</span><span class="se">\\</span><span class="s1">beta}$ = (1, 0)&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+<span class="n">label_abline</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">],</span> <span class="s1">&#39;$x_2$-axis: $\hat{</span><span class="se">\\</span><span class="s1">beta}$ = (0, 1)&#39;</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;$x_1$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;$x_2$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_introduction_8_0.png" src="../_images/notebooks_introduction_8_0.png" />
+</div>
+</div>
+<p>The goal of sufficient dimension reduction is to identify the line that
+contains all the information about <img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/>. In this example that would
+be the <img class="math" src="../_images/math/fdf6501bec5987984965f15d09235c645fe06ccb.png" alt="x_1"/>-axis, since <img class="math" src="../_images/math/7646e3a5f67016051f9fa23a82c16bcc646cb2be.png" alt="y = x_1^2"/> is a function of only
+<img class="math" src="../_images/math/fdf6501bec5987984965f15d09235c645fe06ccb.png" alt="x_1"/>. By dropping <img class="math" src="../_images/math/1f1a225cd22b81817fc48b3a84dcf8f1a9e145d8.png" alt="x_2"/> from our analysis we would not lose
+any information about <img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/>, since <img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/> does not depend on
+<img class="math" src="../_images/math/1f1a225cd22b81817fc48b3a84dcf8f1a9e145d8.png" alt="x_2"/>.</p>
+<p>Now you may have notices that each subspace is labeled with a vector
+<img class="math" src="../_images/math/85c913ddf75f037b69d03cf70bcc1100b6655b64.png" alt="\hat{\beta}"/>. This vector tells us the direction of the line.
+More importantly, <img class="math" src="../_images/math/85c913ddf75f037b69d03cf70bcc1100b6655b64.png" alt="\hat{\beta}"/> can be used to project any point
+in the plane onto that line. We just take the dot product. For example
+to project a point onto the <img class="math" src="../_images/math/fdf6501bec5987984965f15d09235c645fe06ccb.png" alt="x_1"/>-axis we let
+<img class="math" src="../_images/math/b2b00d5598590da0d39b7cd48d6571d67a18ea06.png" alt="\hat{\beta} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}"/>, so that
+<img class="math" src="../_images/math/47bb92447871126dd543f126d9a9d407ed628f44.png" alt="\hat{\beta}^T x = \begin{pmatrix} 1 &amp; 0 \end{pmatrix} \begin{pmatrix} x_1 \\ x_2 \end{pmatrix} = x_1"/>.
+It is this <img class="math" src="../_images/math/85c913ddf75f037b69d03cf70bcc1100b6655b64.png" alt="\hat{\beta}"/> that is of central importance in
+sufficient dimension reduction algorithms. If we can estimate
+<img class="math" src="../_images/math/85c913ddf75f037b69d03cf70bcc1100b6655b64.png" alt="\hat{\beta}"/>, then we can create a lower dimensional dataset by
+using <img class="math" src="../_images/math/f1c724633ff42bf7e4620a5c8ba681404d13b12b.png" alt="\mathbf{X}\hat{\beta}"/> in our analysis instead of
+<img class="math" src="../_images/math/c20f7f9210a91b8aeba2e85d2bcb23e29bcab3f4.png" alt="\mathbf{X}"/>.</p>
+<p>Now, let’s take a look at the surface <img class="math" src="../_images/math/7646e3a5f67016051f9fa23a82c16bcc646cb2be.png" alt="y = x_1^2"/> to see how this
+sort of dimension reduction can help us visualize a dataset. A 3d plot
+of the surface in the <img class="math" src="../_images/math/fdf6501bec5987984965f15d09235c645fe06ccb.png" alt="x_1"/>-<img class="math" src="../_images/math/1f1a225cd22b81817fc48b3a84dcf8f1a9e145d8.png" alt="x_2"/>-<img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/> plane is shown
+below.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># generate data y = X_1 ** 2 + 0 * X_2</span>
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span>
+
+<span class="n">x1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+
+<span class="n">X1</span><span class="p">,</span> <span class="n">X2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="p">)</span>
+
+<span class="c1"># plot 3d surface y = x_1 ** 2</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">rstride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cstride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
+
+<span class="c1"># An arrow indicating the central subspace</span>
+<span class="n">arrow</span> <span class="o">=</span> <span class="n">Arrow3D</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mutation_scale</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">arrowstyle</span><span class="o">=</span><span class="s2">&quot;-|&gt;&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">arrow</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;$\hat{</span><span class="se">\\</span><span class="s2">beta} = (1, 0)$&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="c1"># rotate and label our axes</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">35</span><span class="p">,</span> <span class="o">-</span><span class="mi">75</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;$y = x_1^2$&#39;</span><span class="p">);</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;$x_1$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;$x_2$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_introduction_10_0.png" src="../_images/notebooks_introduction_10_0.png" />
+</div>
+</div>
+<p>Notice how the surface only varies along the <img class="math" src="../_images/math/fdf6501bec5987984965f15d09235c645fe06ccb.png" alt="x_1"/>-axis. It is
+completly flat as one traverses along the <img class="math" src="../_images/math/1f1a225cd22b81817fc48b3a84dcf8f1a9e145d8.png" alt="x_2"/> dimension. This is
+what we mean when we say <img class="math" src="../_images/math/1f1a225cd22b81817fc48b3a84dcf8f1a9e145d8.png" alt="x_2"/> carrying no information about
+<img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/>. <img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/> does not change along this direction. In addition,
+the direction associated with the <img class="math" src="../_images/math/fdf6501bec5987984965f15d09235c645fe06ccb.png" alt="x_1"/>-axis,
+<img class="math" src="../_images/math/db0a8b3b519a46464d53c9fa18d5bfb5425ae17e.png" alt="\hat{\beta} = (0, 1)"/>, is labeled with an arrow. Notice that if
+we align our view with the <img class="math" src="../_images/math/85c913ddf75f037b69d03cf70bcc1100b6655b64.png" alt="\hat{\beta}"/> arrow, then we’d be
+looking at a two-dimensional plot instead of a three dimensional plot.
+This is shown below:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">rstride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cstride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">Arrow3D</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mutation_scale</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+            <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">arrowstyle</span><span class="o">=</span><span class="s2">&quot;-|&gt;&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;$\hat{</span><span class="se">\\</span><span class="s2">beta} = (1, 0)$&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;$y = x_1^2$&#39;</span><span class="p">);</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;$x_1$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;$x_2$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_introduction_12_0.png" src="../_images/notebooks_introduction_12_0.png" />
+</div>
+</div>
+<p>So by looking at how <img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/> varies along the
+<img class="math" src="../_images/math/85c913ddf75f037b69d03cf70bcc1100b6655b64.png" alt="\hat{\beta}"/>-directions we’ve gone from viewing a
+three-dimensional plot to a two-dimension plot. In other words, we have
+reduced the number of features from two to one, but the functional form
+<img class="math" src="../_images/math/7646e3a5f67016051f9fa23a82c16bcc646cb2be.png" alt="y = x_1^2"/> is still clear. This reduction of features is
+sufficient!</p>
+</div>
+</div>
+<div class="section" id="Sliced-Inverse-Regression-vs.-PCA">
+<h1>Sliced Inverse Regression vs. PCA<a class="headerlink" href="#Sliced-Inverse-Regression-vs.-PCA" title="Permalink to this headline">¶</a></h1>
+<p>Now that we know what sufficient dimension reduction is trying to
+accomplish, we can look at how it is useful in the analysis of a
+dataset. In addition, this example is designed to highlight the
+differences between <em>unsupervised</em> and <em>sufficient</em> dimension reduction.
+We will compare the subspace identified by <code class="docutils literal"><span class="pre">SlicedInverseRegression</span></code>
+(SIR) in the <code class="docutils literal"><span class="pre">sliced</span></code> package with <code class="docutils literal"><span class="pre">sklearn</span></code>’s <code class="docutils literal"><span class="pre">PCA</span></code>. SIR is based
+on sufficient dimension reduction, while PCA is not.</p>
+<p>Consider the following data generating process:</p>
+<div class="math">
+<p><img src="../_images/math/67ac72349b797ca36dd63bf67f11e68613781535.png" alt="y = \sin(0.7 X_1 - 0.7 X_2) + \epsilon"/></p>
+</div><div class="math">
+<p><img src="../_images/math/3a7f592dd4542105813f3421df0e1b6fe94b742d.png" alt="X_i \overset{iid}\sim N(0, 1), \quad \epsilon \overset{iid}\sim N(0, 0.1)"/></p>
+</div><p>The dataset has two uncorrelated features, <img class="math" src="../_images/math/3362680381e165e1e5ba7d02e55e09d198290431.png" alt="X_1"/> and <img class="math" src="../_images/math/6a2b7e3a7c036f38cbe76c1b4617c7687f4eafcc.png" alt="X_2"/>,
+generated from a normal distribution. The target is the result of
+applying a sine function to a linear combination of <img class="math" src="../_images/math/3362680381e165e1e5ba7d02e55e09d198290431.png" alt="X_1"/> and
+<img class="math" src="../_images/math/6a2b7e3a7c036f38cbe76c1b4617c7687f4eafcc.png" alt="X_2"/>. There is also independent gaussian noise, <img class="math" src="../_images/math/65d19c66c148d5016c6a89d26486bf6d1966ded1.png" alt="\epsilon"/>,
+applied on top of the sinusoidal signal.</p>
+<p>Below is a scatterplot of <img class="math" src="../_images/math/6a2b7e3a7c036f38cbe76c1b4617c7687f4eafcc.png" alt="X_2"/> vs. <img class="math" src="../_images/math/3362680381e165e1e5ba7d02e55e09d198290431.png" alt="X_1"/>. The points are
+colored according to <img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/>. Brighter colors correspond to larger
+values of the target. In addition, the central subspace is labeled with
+a dashed line.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+
+<span class="n">n_samples</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">0.7</span> <span class="o">*</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span>
+
+<span class="c1"># label the central subspace</span>
+<span class="n">line</span><span class="p">,</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">],</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">label_line</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="s1">&#39;central subspace&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># scatter plot of points</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_introduction_16_0.png" src="../_images/notebooks_introduction_16_0.png" />
+</div>
+</div>
+<p>Now for whatever reason we want to reduce the number of features in this
+dataset from two to one. Maybe to better visualize the behavior of
+<img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/>. Or maybe because we can only use one feature to build our
+predictive model. Regardless we decide to compare the one dimensional
+feature found by SIR with the first principal component of PCA.</p>
+<p>Let’s take a step back and think about how we would remove features if
+we knew how the data was generated. If we knew the data generating
+process above, then we could recognize that the mean of <img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/> is
+completely determined by a single feature:</p>
+<div class="math">
+<p><img src="../_images/math/fe8a990e2ef1718bc2f4d9869ae555ace3c94267.png" alt="Z = 0.7X_1 - 0.7X_2."/></p>
+</div><p>If <img class="math" src="../_images/math/1da5f167ccdbffd640c7ddc9c01f763f19e9b21a.png" alt="Z = \pi"/>, then <img class="math" src="../_images/math/b29f19621e535098eb13168d72b3cfc4d0b9851a.png" alt="E[y|Z] = \sin(Z) = \sin(\pi) = 0"/>. The
+conditional expectation is a function of a single variable, <img class="math" src="../_images/math/bcb2457ac9d8995a4f34d57cadac7ecbbe58f3bd.png" alt="Z"/>,
+instead of the two variables <img class="math" src="../_images/math/3362680381e165e1e5ba7d02e55e09d198290431.png" alt="X_1"/> and <img class="math" src="../_images/math/6a2b7e3a7c036f38cbe76c1b4617c7687f4eafcc.png" alt="X_2"/>. Therefore, we
+should use <img class="math" src="../_images/math/bcb2457ac9d8995a4f34d57cadac7ecbbe58f3bd.png" alt="Z"/> in our analysis instead of <img class="math" src="../_images/math/3362680381e165e1e5ba7d02e55e09d198290431.png" alt="X_1"/> and
+<img class="math" src="../_images/math/6a2b7e3a7c036f38cbe76c1b4617c7687f4eafcc.png" alt="X_2"/>. This would reduced the dimension of our dataset from two to
+one without losing any information about <img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/>.</p>
+<p>Of course, sufficient dimension reduction is thinking in terms of
+subspaces not derived features. So what subspace is associated with the
+variable <img class="math" src="../_images/math/bcb2457ac9d8995a4f34d57cadac7ecbbe58f3bd.png" alt="Z"/>? In terms of directions, we see that <img class="math" src="../_images/math/bcb2457ac9d8995a4f34d57cadac7ecbbe58f3bd.png" alt="Z"/> is
+associated with the vector <img class="math" src="../_images/math/71d1f9fbb79160b82b4f8248a74f40a9e47d59e9.png" alt="\hat{\beta} = (0.7, -0.7)"/>. This is
+because we can calculate <img class="math" src="../_images/math/bcb2457ac9d8995a4f34d57cadac7ecbbe58f3bd.png" alt="Z"/> by carrying out the product:</p>
+<div class="math">
+<p><img src="../_images/math/5ef202af9eda45bf4808f66783c9f6fcce967827.png" alt="Z = \hat{\beta}^T X = \begin{pmatrix} 0.7 &amp; -0.7 \end{pmatrix} \begin{pmatrix} X_1 \\ X_2 \end{pmatrix} = 0.7 X_1 - 0.7 X_2."/></p>
+</div><p>Thus we should focus our attention on the one dimensional subspace
+<img class="math" src="../_images/math/bf2244614c87cfccba30ea3d8578696bbd926758.png" alt="\hat{\beta} = (1, -1)"/> instead of the two dimensional plane.</p>
+<p>Of course we do not know that <img class="math" src="../_images/math/85c913ddf75f037b69d03cf70bcc1100b6655b64.png" alt="\hat{\beta}"/> exists, so we set out
+to use SIR and PCA to estimate it from the data. To fit SIR we import
+the algorithm from <code class="docutils literal"><span class="pre">sliced</span></code> library:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">sliced</span> <span class="k">import</span> <span class="n">SlicedInverseRegression</span>
+</pre></div>
+</div>
+</div>
+<p>Then we create a SIR object. In addition, we tell the algorithm that we
+are only looking for a single direction. This hyperparameter is denoted
+by <code class="docutils literal"><span class="pre">n_components</span></code> to match the API of <code class="docutils literal"><span class="pre">PCA</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">sir</span> <span class="o">=</span> <span class="n">SlicedInverseRegression</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Finally we fit the object to the data <strong>as well as the target</strong>,
+<img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/>. This is the difference between PCA and SIR. SIR is aware of
+the target, and will use that information to determine an appropriate
+subspace. Notice that the fit method returns the object itself, so we
+can use it for chaining if we desire.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">sir</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[8]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>SlicedInverseRegression(copy=True, n_components=1, n_slices=10)
+</pre></div>
+</div>
+</div>
+<p>At this point we’re done! We succesfully fit SIR. Compare that process
+with fitting PCA to extract a single principal component:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="k">import</span> <span class="n">PCA</span>
+
+<span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Both estimators are almost interchangable. The only difference is SIR is
+aware of the target. Of course, the goal was to extract the directions
+of our reduced feature space. Just like PCA, SIR stores this result in
+the <code class="docutils literal"><span class="pre">components_</span></code> attribute.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">pca_direction</span> <span class="o">=</span>  <span class="n">pca</span><span class="o">.</span><span class="n">components_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">sir_direction</span> <span class="o">=</span> <span class="n">sir</span><span class="o">.</span><span class="n">components_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+<p>With our models fit, let’s compare the directions found by PCA and SIR:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># label the central subspace</span>
+<span class="n">line</span><span class="p">,</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">],</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">label_line</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="s1">&#39;central subspace&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># scatter plot of points</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># label subspaces found by PCA and SIR</span>
+<span class="n">arrow_aes</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">head_width</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                 <span class="n">head_length</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                 <span class="n">width</span><span class="o">=</span><span class="mf">0.08</span><span class="p">,</span>
+                 <span class="n">ec</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pca_direction</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pca_direction</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">arrow_aes</span><span class="p">)</span>
+<span class="n">label_component</span><span class="p">(</span><span class="n">pca_direction</span><span class="p">,</span> <span class="s1">&#39;PCA&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sir_direction</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sir_direction</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;deepskyblue&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">arrow_aes</span><span class="p">)</span>
+<span class="n">label_component</span><span class="p">(</span><span class="n">sir_direction</span><span class="p">,</span> <span class="s1">&#39;SIR&#39;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;deepskyblue&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_introduction_28_0.png" src="../_images/notebooks_introduction_28_0.png" />
+</div>
+</div>
+<p>The orange arrow corresponds to the subspace found by PCA, while the
+blue arrow corresponds to the subspace found by SIR. Notice how the
+direction found by PCA has nothing to do with <img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/>. If it did, then
+it would point along the color gradient. Instead PCA picks the direction
+that happens to have the most spread in the data cloud. In fact, this
+direction is meaningless since the data was generated from an isotropic
+gaussian blob. However, SIR knows about <img class="math" src="../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/>. Therefore it orients
+itself nicely along the color gradient, which contains all the
+information about the target.</p>
+<p>To see how this helps visualization, we can project the dataset into the
+SIR and PCA subspace by using the <code class="docutils literal"><span class="pre">transform</span></code> method:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># project data into the subspaces identified by SIR and PCA</span>
+<span class="n">X_sir</span> <span class="o">=</span> <span class="n">sir</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">X_pca</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_sir</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;SIR Subspace&#39;</span><span class="p">)</span>
+
+<span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_pca</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;PCA Subspace&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_introduction_31_0.png" src="../_images/notebooks_introduction_31_0.png" />
+</div>
+</div>
+<p>These plots display the power of the SIR algorithm. The sinusoidal
+pattern that links the features with the target is clearly visiable in
+the SIR plot on the left. However, this pattern is almost washed out in
+the PCA plot on the right with data spread almost uniformaly about the
+scatter plot.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [163]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">normalize_it</span><span class="p">(</span><span class="n">vec</span><span class="p">):</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">vec</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">vec</span>
+
+
+<span class="k">def</span> <span class="nf">replicate_angle</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">2500</span><span class="p">):</span>
+    <span class="c1"># direction of dimension reducing subspace</span>
+    <span class="n">true_direction</span> <span class="o">=</span> <span class="n">normalize_it</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+    <span class="n">pca_angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n_iter</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">sir_angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n_iter</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_iter</span><span class="p">):</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">0.7</span> <span class="o">*</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span>
+
+        <span class="n">sir</span> <span class="o">=</span> <span class="n">SlicedInverseRegression</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">sir_direction</span> <span class="o">=</span> <span class="n">normalize_it</span><span class="p">(</span><span class="n">sir</span><span class="o">.</span><span class="n">components_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>
+
+        <span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">pca_direction</span> <span class="o">=</span> <span class="n">normalize_it</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">components_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>
+
+        <span class="n">cos_angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">pca_direction</span><span class="p">,</span> <span class="n">true_direction</span><span class="p">)</span>
+        <span class="n">pca_angle</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">cos_angle</span><span class="p">)</span>
+
+        <span class="n">cos_angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">sir_direction</span><span class="p">,</span> <span class="n">true_direction</span><span class="p">)</span>
+        <span class="n">sir_angle</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">cos_angle</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pca_angle</span><span class="p">,</span> <span class="n">sir_angle</span>
+
+<span class="n">pca_angle</span><span class="p">,</span> <span class="n">sir_angle</span> <span class="o">=</span> <span class="n">replicate_angle</span><span class="p">()</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">pca_angle</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;steelblue&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;PCA&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Angle between $\hat{</span><span class="se">\\</span><span class="s1">beta}_</span><span class="si">{true}</span><span class="s1">$ and $\hat{</span><span class="se">\\</span><span class="s1">beta}_</span><span class="si">{pca}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Counts&#39;</span><span class="p">)</span>
+
+<span class="n">ax2</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">sir_angle</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;steelblue&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;SIR&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Angle between $\hat{</span><span class="se">\\</span><span class="s1">beta}_</span><span class="si">{true}</span><span class="s1">$ and $\hat{</span><span class="se">\\</span><span class="s1">beta}_</span><span class="si">{sir}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Counts&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[163]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>&lt;matplotlib.text.Text at 0x1207daa90&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_introduction_33_1.png" src="../_images/notebooks_introduction_33_1.png" />
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2018, Joshua Loyal.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+sliced\.sir\.SlicedInverseRegression
+====================================
+
+.. currentmodule:: sliced.sir
+
+.. autoclass:: SlicedInverseRegression
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SlicedInverseRegression.__init__
+      ~SlicedInverseRegression.fit
+      ~SlicedInverseRegression.fit_transform
+      ~SlicedInverseRegression.get_params
+      ~SlicedInverseRegression.set_params
+      ~SlicedInverseRegression.transform
+   
+   
+
+   
+   
+   

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>sliced API &#8212; sliced 0.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sliced.sir.SlicedInverseRegression" href="generated/sliced.sir.SlicedInverseRegression.html" />
+    <link rel="prev" title="Quick Start" href="notebooks/quickstart.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+<div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">
+        sliced</a>
+      <span class="navbar-text navbar-version pull-left"><b>0.1</b></span>
+    </div>
+
+      <div class="collapse navbar-collapse nav-collapse">
+        <ul class="nav navbar-nav">
+          
+          
+          
+          
+        </ul>
+
+        
+          
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        
+        
+          
+            <ul class='nav navbar-nav navbar-right'>
+                
+  <li>
+    <a href="notebooks/quickstart.html" title="Previous Chapter: Quick Start"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Quick Start</span>
+    </a>
+  </li>
+  <li>
+    <a href="generated/sliced.sir.SlicedInverseRegression.html" title="Next Chapter: sliced.sir.SlicedInverseRegression"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">sliced.sir.SlicedInvers... &raquo;</span>
+    </a>
+  </li>
+            </ul>
+          
+        
+      </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="notebooks/quickstart.html">Quick Start</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">sliced API</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial - Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="col-md-9 content">
+      
+  <div class="section" id="sliced-api">
+<h1>sliced API<a class="headerlink" href="#sliced-api" title="Permalink to this headline">¶</a></h1>
+<p>Major classes are <a class="reference internal" href="generated/sliced.sir.SlicedInverseRegression.html#sliced.sir.SlicedInverseRegression" title="sliced.sir.SlicedInverseRegression"><code class="xref py py-class docutils literal"><span class="pre">sir.SlicedInverseRegression</span></code></a> and
+<a class="reference internal" href="generated/sliced.save.SlicedAverageVarianceEstimation.html#sliced.save.SlicedAverageVarianceEstimation" title="sliced.save.SlicedAverageVarianceEstimation"><code class="xref py py-class docutils literal"><span class="pre">save.SlicedAverageVarianceEstimation</span></code></a>.</p>
+<div class="section" id="transformers">
+<h2>Transformers<a class="headerlink" href="#transformers" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/sliced.sir.SlicedInverseRegression.html#sliced.sir.SlicedInverseRegression" title="sliced.sir.SlicedInverseRegression"><code class="xref py py-obj docutils literal"><span class="pre">sir.SlicedInverseRegression</span></code></a>([n_components,&nbsp;…])</td>
+<td>Sliced Inverse Regression (SIR) [1]</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/sliced.save.SlicedAverageVarianceEstimation.html#sliced.save.SlicedAverageVarianceEstimation" title="sliced.save.SlicedAverageVarianceEstimation"><code class="xref py py-obj docutils literal"><span class="pre">save.SlicedAverageVarianceEstimation</span></code></a>([…])</td>
+<td>Sliced Average Variance Estimation (SAVE) [1]</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="datasets">
+<h2>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline">¶</a></h2>
+<p>Datasets used in the examples as well as to test the algorithms are contained in
+the datasets module.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/sliced.datasets.make_cubic.html#sliced.datasets.make_cubic" title="sliced.datasets.make_cubic"><code class="xref py py-obj docutils literal"><span class="pre">datasets.make_cubic</span></code></a>([n_samples,&nbsp;n_features,&nbsp;…])</td>
+<td>Generates a dataset with a cubic response curve.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/sliced.datasets.make_quadratic.html#sliced.datasets.make_quadratic" title="sliced.datasets.make_quadratic"><code class="xref py py-obj docutils literal"><span class="pre">datasets.make_quadratic</span></code></a>([n_samples,&nbsp;…])</td>
+<td>Generates a dataset with a quadratic response curve.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/sliced.datasets.make_polynomial.html#sliced.datasets.make_polynomial" title="sliced.datasets.make_polynomial"><code class="xref py py-obj docutils literal"><span class="pre">datasets.make_polynomial</span></code></a>([n_samples,&nbsp;…])</td>
+<td>Generates a dataset with a polynomial response curve that combines a quadratic and cubic response.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="utilities">
+<h2>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/sliced.base.whiten_X.html#sliced.base.whiten_X" title="sliced.base.whiten_X"><code class="xref py py-obj docutils literal"><span class="pre">base.whiten_X</span></code></a>(X[,&nbsp;center,&nbsp;method,&nbsp;copy])</td>
+<td>Whiten a data matrix using either the choleksy, QR or spectral method.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2018, Joshua Loyal.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

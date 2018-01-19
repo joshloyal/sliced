@@ -1,0 +1,6 @@
+sliced\.datasets\.make\_polynomial
+==================================
+
+.. currentmodule:: sliced.datasets
+
+.. autofunction:: make_polynomial

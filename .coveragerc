@@ -1,8 +1,0 @@
-# configuration for coverage.py
-
-[run]
-branch = True
-source = sliced
-include = */sliced/*
-omit =
-    */setup.py

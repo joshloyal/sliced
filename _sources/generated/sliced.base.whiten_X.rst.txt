@@ -1,0 +1,6 @@
+sliced\.base\.whiten\_X
+=======================
+
+.. currentmodule:: sliced.base
+
+.. autofunction:: whiten_X

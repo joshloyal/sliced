@@ -1,0 +1,6 @@
+sliced\.datasets\.make\_cubic
+=============================
+
+.. currentmodule:: sliced.datasets
+
+.. autofunction:: make_cubic

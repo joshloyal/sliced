@@ -1,0 +1,6 @@
+sliced\.datasets\.make\_quadratic
+=================================
+
+.. currentmodule:: sliced.datasets
+
+.. autofunction:: make_quadratic
