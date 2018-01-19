@@ -3,10 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-inverse-moment-reductions
-=========================
+sliced
+======
 
-The invserse-moment-reduction package is a library for sufficient dimension reduction
+The sliced package is a library for sufficient dimension reduction
 using inverse moment methods in Python.
 
 Highlights:
@@ -23,7 +23,7 @@ Methods supported:
    :hidden:
    :caption: Documentation
 
-   notebooks/introduction.ipynb
+   notebooks/quickstart.ipynb
    api
 
 .. toctree::
@@ -31,7 +31,6 @@ Methods supported:
    :hidden:
    :caption: Tutorial - Examples
 
-   notebooks/sir.ipynb
    auto_examples/index
 
 
