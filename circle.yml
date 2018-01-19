@@ -29,7 +29,7 @@ dependencies:
     - sudo -E apt-get -yq --no-install-suggests --no-install-recommends --force-yes install dvipng texlive-latex-base texlive-latex-extra
 
   override:
-    - ./ci_scripts/circleci/build_doc.sh:
+    - bash ci_scripts/circleci/build_doc.sh:
         timeout: 3600 # seconds
 test:
   # Grep error on the documentation
