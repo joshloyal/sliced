@@ -35,7 +35,7 @@ except ImportError:
 
 
 CLASSIFIERS = ['Intended Audience :: Science/Research',
-               'Intended Audiance :: Developers',
+               'Intended Audience :: Developers',
                'License :: OSI Approved :: MIT License',
                'Programming Language :: Python',
                'Topic :: Software Development',
