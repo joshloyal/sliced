@@ -37,7 +37,7 @@ except ImportError:
 setup(
     name="sliced",
     version=__version__,
-    description='Scikit-Learn compatabile Sufficient Dimension Reduction algorithms.',
+    description='Scikit-learn Compatible Sufficient Dimension Reduction (SDR)',
     author='Joshua D. Loyal',
     author_email='jloyal25@gmail.com',
     packages=find_packages(),
