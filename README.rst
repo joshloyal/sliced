@@ -20,8 +20,8 @@ sliced
 sliced is a python package offering a number of sufficient dimension reduction (SDR) techniques commonly used in high-dimensional datasets with a supervised target. It is compatible with scikit-learn_.
 
 The algorithms available in sliced include:
-* Sliced Inverse Regression (SIR)
-* Sliced Average Variance Estimation (SAVE)
+* Sliced Inverse Regression (SIR) [1]_
+* Sliced Average Variance Estimation (SAVE) [2]_
 
 Website: https://joshloyal.github.io/sliced/
 
@@ -64,9 +64,9 @@ After installation, you can use pytest to run the test suite via setup.py::
 
 References:
 -----------
-.. [1] : Li, K C. (1991)
-         "Sliced Inverse Regression for Dimension Reduction (with discussion)",
+.. [1]: Li, K C. (1991)
+        "Sliced Inverse Regression for Dimension Reduction (with discussion)",
          Journal of the American Statistical Association, 86, 316-342.
-.. [2] : Shao, Y, Cook, RD and Weisberg, S (2007).
-         "Marginal Tests with Sliced Average Variance Estimation",
-         Biometrika, 94, 285-296.
+.. [2]: Shao, Y, Cook, RD and Weisberg, S (2007).
+        "Marginal Tests with Sliced Average Variance Estimation",
+        Biometrika, 94, 285-296.
