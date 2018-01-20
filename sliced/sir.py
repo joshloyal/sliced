@@ -174,8 +174,8 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
         components = np.dot(V.T, sigma_inv).T
         singular_values = (S ** 2)
 
-        # the number of components is chosen by finding the maximum gap among the
-        # ordered eigenvalues.
+        # the number of components is chosen by finding the maximum gap among
+        # the ordered eigenvalues.
         if self.n_components_ == 'auto':
             self.n_components_ = np.argmax(np.abs(np.diff(singular_values))) + 1
 
