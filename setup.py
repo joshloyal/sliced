@@ -34,6 +34,24 @@ except ImportError:
     sys.exit(1)
 
 
+CLASSIFIERS = ['Intended Audience :: Science/Research',
+               'Intended Audiance :: Developers',
+               'License :: OSI Approved :: MIT License',
+               'Programming Language :: Python',
+               'Topic :: Software Development',
+               'Topic :: Scientific/Engineering',
+               'Operating System :: Microsoft :: Windows',
+               'Operating System :: POSIX',
+               'Operating System :: Unix',
+               'Operating System :: MacOS',
+               'Programming Language :: Python :: 2',
+               'Programming Language :: Python :: 2.7',
+               'Programming Language :: Python :: 3',
+               'Programming Language :: Python :: 3.5',
+               'Programming Language :: Python :: 3.6',
+              ]
+
+
 setup(
     name="sliced",
     version=__version__,
@@ -46,5 +64,6 @@ setup(
     setup_requires=['pytest-runner'],
     tests_require=TEST_REQUIRES,
     url='https://github.com/joshloyal/sliced',
+    classifiers=CLASSIFIERS,
     license='MIT',
 )
