@@ -19,7 +19,7 @@ ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 # the i18n builder cannot share the environment and doctrees with the others
 I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 
-.PHONY: help clean html dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub latex latexpdf text man changes linkcheck doctest gettext notebooks autogen
+.PHONY: help clean html dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub latex latexpdf text man changes linkcheck doctest gettext notebooks autogen readme
 
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
@@ -52,8 +52,9 @@ clean:
 	-rm -rf generated/*
 	-rm -rf modules/generated/*
 	-rm -rf notebooks/*
+	-rm README.rst
 
-html: notebook autogen
+html: notebook autogen readme
 	# These two lines make the build a bit more lengthy, and the
 	# the embedding of images more robust
 	rm -rf $(BUILDDIR)/html/_images
@@ -65,6 +66,9 @@ html: notebook autogen
 notebook:
 	mkdir -p notebooks
 	cp -r ../notebooks/* notebooks
+
+readme:
+	cp ../README.rst .
 
 autogen:
 	sphinx-autogen -o generated *.rst

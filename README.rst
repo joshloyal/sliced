@@ -1,5 +1,5 @@
 .. -*- mode: rst -*-
-|Travis|_ |AppVeyor|_ |Coveralls|_ |CircleCI|_
+|Travis|_ |AppVeyor|_ |Coveralls|_ |CircleCI|_ |License|_
 
 .. |Travis| image:: https://travis-ci.org/joshloyal/sliced.svg?branch=master
 .. _Travis: https://travis-ci.org/joshloyal/sliced
@@ -13,18 +13,44 @@
 .. |CircleCI| image:: https://circleci.com/gh/joshloyal/sliced/tree/master.svg?style=svg
 .. _CircleCI: https://circleci.com/gh/joshloyal/sliced/tree/master
 
+.. |License| image:: https://img.shields.io/badge/License-MIT-blue.svg
+.. _License: https://opensource.org/licenses/MIT
+
 .. _scikit-learn: https://github.com/scikit-learn/scikit-learn
 
 sliced
 ======
 sliced is a python package offering a number of sufficient dimension reduction (SDR) techniques commonly used in high-dimensional datasets with a supervised target. It is compatible with scikit-learn_.
 
-The algorithms available in sliced include:
+
+Algorithms supported:
 
 - Sliced Inverse Regression (SIR) [1]_
 - Sliced Average Variance Estimation (SAVE) [2]_
 
-Website: https://joshloyal.github.io/sliced/
+Documentation Website: https://joshloyal.github.io/sliced/
+
+
+Example
+-------
+Example that shows how to learn a one dimensional subspace from a dataset with ten features:
+
+.. code-block:: python
+
+   from sliced.datasets import make_cubic
+   from sliced import SlicedInverseRegression
+
+   # load the 10-dimensional dataset
+   X, y = make_cubic(random_state=123)
+
+   # Set the options for SIR
+   sir = SlicedInverseRegression(n_components=1)
+
+   # fit the model
+   sir.fit(X, y)
+
+   # transform into the new subspace
+   X_sir = sir.transform(X)
 
 
 Installation
@@ -43,7 +69,7 @@ Additionally, to run examples, you need matplotlib(>=2.0.0).
 
 Installation
 ------------
-You need a working installatio of numpy and scipy to install sliced. If you have a working installation of numpy and sliced, the easiest way to install sliced is using ``pip``::
+You need a working installation of numpy and scipy to install sliced. If you have a working installation of numpy and sliced, the easiest way to install sliced is using ``pip``::
 
     pip install -U sliced
 
