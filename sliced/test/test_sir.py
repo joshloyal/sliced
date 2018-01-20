@@ -72,3 +72,11 @@ def test_sparse_not_supported():
     X = sparse.csr_matrix(X)
     with pytest.raises(TypeError):
         SlicedInverseRegression().fit(X, y)
+
+def test_n_components_auto_heuristic():
+    X, y = datasets.make_exponential(random_state=123)
+    sir = SlicedInverseRegression(n_components='auto').fit(X, y)
+    assert sir.n_components_ == 2
+
+    X_sir = sir.transform(X)
+    assert X_sir.shape == (500, 2)
