@@ -67,7 +67,7 @@ References:
 -----------
 .. [1] : Li, K C. (1991)
         "Sliced Inverse Regression for Dimension Reduction (with discussion)",
-         Journal of the American Statistical Association, 86, 316-342.
+        Journal of the American Statistical Association, 86, 316-342.
 .. [2] : Shao, Y, Cook, RD and Weisberg, S (2007).
          "Marginal Tests with Sliced Average Variance Estimation",
          Biometrika, 94, 285-296.
