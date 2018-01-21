@@ -269,7 +269,7 @@
 
         <span class="c1"># PCA of slice matrix</span>
         <span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">Z_means</span><span class="p">,</span> <span class="n">full_matrices</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">components</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">sigma_inv</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">components</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">sigma_inv</span><span class="p">)</span>
         <span class="n">singular_values</span> <span class="o">=</span> <span class="p">(</span><span class="n">S</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
 
         <span class="c1"># the number of components is chosen by finding the maximum gap among</span>
