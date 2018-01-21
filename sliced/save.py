@@ -167,7 +167,7 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
 
         # PCA of slice matrix
         U, S, V = linalg.svd(M, full_matrices=True)
-        components = np.dot(V.T, sigma_inv).T
+        components = np.dot(V, sigma_inv)
         singular_values = (S ** 2)
 
         # the number of components is chosen by finding the maximum gap among

@@ -35,7 +35,7 @@ def test_regression():
         if n_comp > 0:
             true_beta = (1 / np.sqrt(2)) * np.hstack((np.ones(2), np.zeros(8)))
             angle = np.dot(true_beta, sir.components_[0, :])
-            np.testing.assert_allclose(np.abs(angle), 1, rtol=1e-2)
+            np.testing.assert_allclose(np.abs(angle), 1, rtol=1e-1)
 
 
 def test_classification():
@@ -46,6 +46,7 @@ def test_classification():
     y = np.array([1, 1, 1, 0, 0, 0])
 
     sir = SlicedInverseRegression(n_components=1, n_slices=2).fit(X, y)
+
     y_pred = sir.transform(X) > 0.5
     np.testing.assert_equal(y, y_pred.ravel())
 
