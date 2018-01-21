@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-from __future__ import unicode_literals
 
 import warnings
 
@@ -37,9 +36,13 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
 
     Parameters
     ----------
-    n_components : int, None (default=None)
+    n_components : int, str or None (default='auto')
         Number of directions to keep. Corresponds to the dimension of
-        the central subpace.
+        the central subpace. If n_components=='auto', the number of components
+        is chosen by finding the maximum gap in the ordered eigenvalues of
+        the var(X|y) matrix and choosing the components before this gap.
+        If n_components==None, the number of components equals the number of
+        features.
 
     n_slices : int (default=10)
         The number of slices used when calculating the inverse regression
@@ -82,7 +85,7 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
         "Marginal Tests with Sliced Average Variance Estimation",
         Biometrika, 94, 285-296.
     """
-    def __init__(self, n_components=None, n_slices=10, copy=True):
+    def __init__(self, n_components='auto', n_slices=10, copy=True):
         self.n_components = n_components
         self.n_slices = n_slices
         self.copy = copy
@@ -164,8 +167,16 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
 
         # PCA of slice matrix
         U, S, V = linalg.svd(M, full_matrices=True)
-        self.components_ = np.dot(V.T, sigma_inv)[:, :self.n_components_].T
-        self.singular_values_ = (S ** 2)[:self.n_components_]
+        components = np.dot(V.T, sigma_inv).T
+        singular_values = (S ** 2)
+
+        # the number of components is chosen by finding the maximum gap among
+        # the ordered eigenvalues.
+        if self.n_components_ == 'auto':
+            self.n_components_ = np.argmax(np.abs(np.diff(singular_values))) + 1
+
+        self.components_ = components[:self.n_components_, :]
+        self.singular_values_ = singular_values[:self.n_components_]
 
         return self
 

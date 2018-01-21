@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-from __future__ import unicode_literals
 
 import numpy as np
 import pytest
@@ -82,3 +81,12 @@ def test_sparse_not_supported():
 
     with pytest.raises(TypeError):
         SlicedAverageVarianceEstimation().fit(X, y)
+
+
+def test_n_components_auto_heuristic():
+    X, y = datasets.make_exponential(random_state=123)
+    save = SlicedAverageVarianceEstimation(n_components='auto').fit(X, y)
+    assert save.n_components_ == 2
+
+    X_save = save.transform(X)
+    assert X_save.shape == (500, 2)
