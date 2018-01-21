@@ -105,7 +105,7 @@
 <h1>sliced.sir.SlicedInverseRegression<a class="headerlink" href="#sliced-sir-slicedinverseregression" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="sliced.sir.SlicedInverseRegression">
-<em class="property">class </em><code class="descclassname">sliced.sir.</code><code class="descname">SlicedInverseRegression</code><span class="sig-paren">(</span><em>n_components=None</em>, <em>n_slices=10</em>, <em>copy=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sliced/sir.html#SlicedInverseRegression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sliced.sir.SlicedInverseRegression" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">sliced.sir.</code><code class="descname">SlicedInverseRegression</code><span class="sig-paren">(</span><em>n_components='auto'</em>, <em>n_slices=10</em>, <em>copy=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sliced/sir.html#SlicedInverseRegression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sliced.sir.SlicedInverseRegression" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sliced Inverse Regression (SIR) [1]</p>
 <p>Linear dimensionality reduction using the inverse regression curve,
 E[X|y], to identify the directions defining the central subspace of
@@ -127,10 +127,14 @@ a dataset.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n_components</strong> : int, None (default=None)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n_components</strong> : int, str or None (default=’auto’)</p>
 <blockquote>
 <div><p>Number of directions to keep. Corresponds to the dimension of
-the central subpace.</p>
+the central subpace. If n_components==’auto’, the number of components
+is chosen by finding the maximum gap in the ordered eigenvalues of
+the var(X|y) matrix and choosing the components before this gap.
+If n_components==None, the number of components equals the number of
+features.</p>
 </div></blockquote>
 <p><strong>n_slices</strong> : int (default=10)</p>
 <blockquote>
@@ -205,7 +209,7 @@ Journal of the American Statistical Association, 86, 316-342.</dd>
 </table>
 <dl class="method">
 <dt id="sliced.sir.SlicedInverseRegression.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>n_components=None</em>, <em>n_slices=10</em>, <em>copy=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sliced/sir.html#SlicedInverseRegression.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sliced.sir.SlicedInverseRegression.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>n_components='auto'</em>, <em>n_slices=10</em>, <em>copy=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sliced/sir.html#SlicedInverseRegression.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sliced.sir.SlicedInverseRegression.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p class="rubric">Methods</p>

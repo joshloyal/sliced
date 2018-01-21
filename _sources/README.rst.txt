@@ -28,7 +28,7 @@ Algorithms supported:
 - Sliced Inverse Regression (SIR) [1]_
 - Sliced Average Variance Estimation (SAVE) [2]_
 
-Documentation Website: https://joshloyal.github.io/sliced/
+Documentation / Website: https://joshloyal.github.io/sliced/
 
 
 Example
@@ -69,7 +69,7 @@ Additionally, to run examples, you need matplotlib(>=2.0.0).
 
 Installation
 ------------
-You need a working installation of numpy and scipy to install sliced. If you have a working installation of numpy and sliced, the easiest way to install sliced is using ``pip``::
+You need a working installation of numpy and scipy to install sliced. If you have a working installation of numpy and scipy, the easiest way to install sliced is using ``pip``::
 
     pip install -U sliced
 
@@ -79,7 +79,7 @@ If you prefer, you can clone the repository and run the setup.py file. Use the f
     cd sliced
     pip install .
 
-Of install using pip and GitHub::
+Or install using pip and GitHub::
 
     pip install -U git+https://github.com/joshloyal/sliced.git
 

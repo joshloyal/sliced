@@ -100,7 +100,6 @@
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
 
 <span class="kn">import</span> <span class="nn">warnings</span>
 
@@ -151,9 +150,13 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    n_components : int, None (default=None)</span>
+<span class="sd">    n_components : int, str or None (default=&#39;auto&#39;)</span>
 <span class="sd">        Number of directions to keep. Corresponds to the dimension of</span>
-<span class="sd">        the central subpace.</span>
+<span class="sd">        the central subpace. If n_components==&#39;auto&#39;, the number of components</span>
+<span class="sd">        is chosen by finding the maximum gap in the ordered eigenvalues of</span>
+<span class="sd">        the var(X|y) matrix and choosing the components before this gap.</span>
+<span class="sd">        If n_components==None, the number of components equals the number of</span>
+<span class="sd">        features.</span>
 
 <span class="sd">    n_slices : int (default=10)</span>
 <span class="sd">        The number of slices used when calculating the inverse regression</span>
@@ -196,7 +199,7 @@
 <span class="sd">        &quot;Sliced Inverse Regression for Dimension Reduction (with discussion)&quot;,</span>
 <span class="sd">        Journal of the American Statistical Association, 86, 316-342.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="SlicedInverseRegression.__init__"><a class="viewcode-back" href="../../generated/sliced.sir.SlicedInverseRegression.html#sliced.sir.SlicedInverseRegression.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_slices</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="SlicedInverseRegression.__init__"><a class="viewcode-back" href="../../generated/sliced.sir.SlicedInverseRegression.html#sliced.sir.SlicedInverseRegression.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">n_slices</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_components</span> <span class="o">=</span> <span class="n">n_components</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_slices</span> <span class="o">=</span> <span class="n">n_slices</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">copy</span> <span class="o">=</span> <span class="n">copy</span></div>
@@ -266,8 +269,16 @@
 
         <span class="c1"># PCA of slice matrix</span>
         <span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">Z_means</span><span class="p">,</span> <span class="n">full_matrices</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">components_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">sigma_inv</span><span class="p">)[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_components_</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">singular_values_</span> <span class="o">=</span> <span class="p">(</span><span class="n">S</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)[:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_components_</span><span class="p">]</span>
+        <span class="n">components</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">sigma_inv</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">singular_values</span> <span class="o">=</span> <span class="p">(</span><span class="n">S</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># the number of components is chosen by finding the maximum gap among</span>
+        <span class="c1"># the ordered eigenvalues.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_components_</span> <span class="o">==</span> <span class="s1">&#39;auto&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_components_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">singular_values</span><span class="p">)))</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">components_</span> <span class="o">=</span> <span class="n">components</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_components_</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">singular_values_</span> <span class="o">=</span> <span class="n">singular_values</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_components_</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="bp">self</span>
 

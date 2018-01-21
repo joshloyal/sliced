@@ -51,7 +51,7 @@ An example plot of :class:`sliced.sir.SlicedInverseRegression`
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  0.062 seconds)
+**Total running time of the script:** ( 0 minutes  0.060 seconds)
 
 
 
