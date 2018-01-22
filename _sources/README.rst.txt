@@ -1,4 +1,5 @@
 .. -*- mode: rst -*-
+
 |Travis|_ |AppVeyor|_ |Coveralls|_ |CircleCI|_ |License|_
 
 .. |Travis| image:: https://travis-ci.org/joshloyal/sliced.svg?branch=master
