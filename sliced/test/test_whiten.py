@@ -4,7 +4,7 @@ from __future__ import print_function
 
 import numpy as np
 
-from sliced.base import whiten_X
+from sliced.whiten import Whiten
 
 
 rng = np.random.RandomState(123)
@@ -17,7 +17,8 @@ X = rng.multivariate_normal(mean, sigma, 100)
 
 
 def test_whiten_cholesky():
-    Z, sigma_inv = whiten_X(X, method='cholesky')
+    whiten = Whiten(method='cholesky')
+    Z = whiten.fit_transform(X)
 
     Z_mean = np.mean(Z, axis=0)
     np.testing.assert_allclose(Z_mean, np.zeros(2), atol=1e-7)
@@ -27,7 +28,8 @@ def test_whiten_cholesky():
 
 
 def test_whiten_qr():
-    Z, sigma_inv = whiten_X(X, method='qr')
+    whiten = Whiten(method='qr')
+    Z = whiten.fit_transform(X)
 
     Z_mean = np.mean(Z, axis=0)
     np.testing.assert_allclose(Z_mean, np.zeros(2), atol=1e-7)
@@ -37,8 +39,9 @@ def test_whiten_qr():
     np.testing.assert_allclose(Z_cov, np.eye(2), rtol=1e-2, atol=1e-2)
 
 
-def test_whiten_spectral():
-    Z, sigma_inv = whiten_X(X, method='spectral')
+def test_whiten_mahalanobis():
+    whiten = Whiten(method='mahalanobis')
+    Z = whiten.fit_transform(X)
 
     Z_mean = np.mean(Z, axis=0)
     np.testing.assert_allclose(Z_mean, np.zeros(2), atol=1e-7)

@@ -12,7 +12,8 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils import check_array, check_X_y
 from sklearn.utils.validation import check_is_fitted
 
-from .base import whiten_X, slice_X, is_multioutput
+from .base import slice_X, is_multioutput
+from .whiten import Whiten
 
 
 __all__ = ['SlicedAverageVarianceEstimation']
@@ -143,7 +144,8 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
 
         # Center and Whiten feature matrix using the cholesky decomposition
         # (the original implementation uses QR, but this has numeric errors).
-        Z, sigma_inv = whiten_X(X, method='cholesky', copy=False)
+        whiten = Whiten(method='cholesky', copy=False)
+        Z = whiten.fit_transform(X)
 
         # sort rows of Z with respect to the target y
         Z = Z[np.argsort(y), :]
@@ -167,7 +169,7 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
 
         # PCA of slice matrix
         U, S, V = linalg.svd(M, full_matrices=True)
-        components = np.dot(V, sigma_inv)
+        components = np.dot(V, whiten.whitening_matrix_)
         singular_values = (S ** 2)
 
         # the number of components is chosen by finding the maximum gap among
