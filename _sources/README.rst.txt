@@ -7,7 +7,7 @@
 .. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/54j060q1ukol1wnu/branch/master?svg=true
 .. _AppVeyor: https://ci.appveyor.com/project/joshloyal/sliced/history
 
-.. |Coveralls| image:: https://coveralls.io/repos/github/joshloyal/sliced/badge.svg?branch=master)
+.. |Coveralls| image:: https://coveralls.io/repos/github/joshloyal/sliced/badge.svg?branch=master
 .. _Coveralls: https://coveralls.io/github/joshloyal/sliced?branch=master
 
 .. |CircleCI| image:: https://circleci.com/gh/joshloyal/sliced/tree/master.svg?style=svg
