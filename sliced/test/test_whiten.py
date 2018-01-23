@@ -48,3 +48,15 @@ def test_whiten_mahalanobis():
 
     Z_cov = np.dot(Z.T, Z) / (Z.shape[0] - 1)
     np.testing.assert_allclose(Z_cov, np.eye(2), atol=1e-7)
+
+
+def test_shrinkage():
+    mean = np.array([-2, 5, 100])
+    sigma = np.array([[1.0, 0.5, 0.0],
+                      [0.5, 1.0, 0.0],
+                      [0.0, 0.0, 1.0]])
+    X = rng.multivariate_normal(mean, sigma, 1000)
+    whiten = Whiten(method='pca', shrinkage='graph_lasso')
+    whiten.fit_transform(X)
+
+    print(whiten.whitening_matrix_)

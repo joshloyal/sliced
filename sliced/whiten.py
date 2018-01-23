@@ -10,6 +10,7 @@ import scipy.linalg as linalg
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.covariance import empirical_covariance, shrunk_covariance
 from sklearn.covariance import ledoit_wolf
+from sklearn.covariance import GraphLassoCV
 
 
 def _empirical_covariance(X, assume_centered):
@@ -23,7 +24,7 @@ def covariance_matrix(X, shrinkage='auto'):
     shrinkage = "empirical" if shrinkage is None else shrinkage
     if isinstance(shrinkage, six.string_types):
         if shrinkage == 'auto':
-            sigma, _ = ledoit_wolf(X)
+            sigma, _ = ledoit_wolf(X, assume_centered=True)
         elif shrinkage == 'empirical':
             sigma = _empirical_covariance(X, assume_centered=True)
         else:
@@ -40,15 +41,22 @@ def covariance_matrix(X, shrinkage='auto'):
 
 
 def sigma_inverse(X, shrinkage='auto', inverse_sqrt=True):
-    sigma = covariance_matrix(X, shrinkage=shrinkage)
+    if shrinkage == 'graph_lasso':
+        X = X / X.std(axis=0)
+        lasso = GraphLassoCV(assume_centered=True).fit(X)
+        if inverse_sqrt:
+            return linalg.sqrtm(lasso.precision_)
+        return lasso.precision_
+    else:
+        sigma = covariance_matrix(X, shrinkage=shrinkage)
 
-    if inverse_sqrt:
-        sigma = linalg.sqrtm(sigma)
+        if inverse_sqrt:
+            sigma = linalg.sqrtm(sigma)
 
-    return linalg.pinvh(sigma)
+        return linalg.pinvh(sigma)
 
 
-def whiten_X(X, assume_centered=True, method='cholesky', shrinkage='auto',
+def whiten_X(X, assume_centered=False, method='cholesky', shrinkage='auto',
              copy=False):
     """Whiten a data matrix using either the choleksy, QR or
     spectral method."""
