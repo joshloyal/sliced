@@ -74,6 +74,7 @@ setup(
     long_description=LONG_DESCRIPTION,
     zip_safe=False,
     classifiers=CLASSIFIERS,
+    include_package_data=True,
     packages=find_packages(),
     install_requires=INSTALL_REQUIRES,
     extras_require={'test': TEST_REQUIRES},
