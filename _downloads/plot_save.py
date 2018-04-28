@@ -18,7 +18,7 @@ save = SlicedAverageVarianceEstimation()
 X_save = save.fit_transform(X, y)
 
 # estimate of the first dimension reducing direction
-beta1_hat = save.components_[0, :]
+beta1_hat = save.directions_[0, :]
 
 plt.scatter(X_save[:, 0], y, c=y, cmap='viridis', linewidth=0.5, edgecolor='k')
 plt.xlabel("$X\hat{\\beta_1}$")

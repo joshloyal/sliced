@@ -1,5 +1,5 @@
-sliced\.datasets\.make\_quadratic
-=================================
+sliced.datasets.make\_quadratic
+===============================
 
 .. currentmodule:: sliced.datasets
 

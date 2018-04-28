@@ -1,5 +1,5 @@
-sliced\.datasets\.make\_polynomial
-==================================
+sliced.datasets.make\_polynomial
+================================
 
 .. currentmodule:: sliced.datasets
 

@@ -1,4 +1,8 @@
+.. note::
+    :class: sphx-glr-download-link-note
 
+    Click :ref:`here <sphx_glr_download_auto_examples_plot_sir.py>` to download the full example code
+.. rst-class:: sphx-glr-example-title
 
 .. _sphx_glr_auto_examples_plot_sir.py:
 
@@ -13,7 +17,7 @@ An example plot of :class:`sliced.sir.SlicedInverseRegression`
 
 
 .. image:: /auto_examples/images/sphx_glr_plot_sir_001.png
-    :align: center
+    :class: sphx-glr-single-img
 
 
 
@@ -34,7 +38,7 @@ An example plot of :class:`sliced.sir.SlicedInverseRegression`
     X_sir = sir.fit_transform(X, y)
 
     # estimate of the first dimension reducing directions
-    beta1_hat = sir.components_[0, :]
+    beta1_hat = sir.directions_[0, :]
 
 
     # plot data projected onto the first direction
@@ -51,8 +55,10 @@ An example plot of :class:`sliced.sir.SlicedInverseRegression`
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  0.061 seconds)
+**Total running time of the script:** ( 0 minutes  0.026 seconds)
 
+
+.. _sphx_glr_download_auto_examples_plot_sir.py:
 
 
 .. only :: html

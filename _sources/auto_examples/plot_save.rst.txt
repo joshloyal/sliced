@@ -1,4 +1,8 @@
+.. note::
+    :class: sphx-glr-download-link-note
 
+    Click :ref:`here <sphx_glr_download_auto_examples_plot_save.py>` to download the full example code
+.. rst-class:: sphx-glr-example-title
 
 .. _sphx_glr_auto_examples_plot_save.py:
 
@@ -13,7 +17,7 @@ An example plot of :class:`sliced.save.SlicedAverageVarianceEstimation`
 
 
 .. image:: /auto_examples/images/sphx_glr_plot_save_001.png
-    :align: center
+    :class: sphx-glr-single-img
 
 
 
@@ -34,7 +38,7 @@ An example plot of :class:`sliced.save.SlicedAverageVarianceEstimation`
     X_save = save.fit_transform(X, y)
 
     # estimate of the first dimension reducing direction
-    beta1_hat = save.components_[0, :]
+    beta1_hat = save.directions_[0, :]
 
     plt.scatter(X_save[:, 0], y, c=y, cmap='viridis', linewidth=0.5, edgecolor='k')
     plt.xlabel("$X\hat{\\beta_1}$")
@@ -49,8 +53,10 @@ An example plot of :class:`sliced.save.SlicedAverageVarianceEstimation`
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  0.401 seconds)
+**Total running time of the script:** ( 0 minutes  0.036 seconds)
 
+
+.. _sphx_glr_download_auto_examples_plot_save.py:
 
 
 .. only :: html

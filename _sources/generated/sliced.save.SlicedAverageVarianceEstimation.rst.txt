@@ -1,5 +1,5 @@
-sliced\.save\.SlicedAverageVarianceEstimation
-=============================================
+sliced.save.SlicedAverageVarianceEstimation
+===========================================
 
 .. currentmodule:: sliced.save
 

@@ -2,6 +2,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Quick Start &#8212; sliced 0.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
@@ -9,16 +10,7 @@
     <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -35,8 +27,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
-  </head>
-  <body>
+  </head><body>
 
 <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
   <div class="container">
@@ -276,11 +267,11 @@ div.nboutput div.output_area.stderr {
 <h1>Quick Start<a class="headerlink" href="#Quick-Start" title="Permalink to this headline">¶</a></h1>
 <p>Joshua Loyal, January 2018</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="o">%</span><span class="k">matplotlib</span> inline
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -293,7 +284,7 @@ div.nboutput div.output_area.stderr {
 </pre></div>
 </div>
 </div>
-<p>The <code class="docutils literal"><span class="pre">sliced</span></code> package helps you find low dimensional information in
+<p>The <code class="docutils literal notranslate"><span class="pre">sliced</span></code> package helps you find low dimensional information in
 your high dimensional data. Furthermore, this information is relevant to
 the problem’s target variable.</p>
 <p>For example, consider the following data generating process:</p>
@@ -306,16 +297,16 @@ the problem’s target variable.</p>
 </div><p>Where <img class="math" src="../_images/math/7a7bb470119808e2db2879fc2b2526f467b7a40b.png" alt="X"/> is a 10-dimensional feature matrix. Notice that
 <img class="math" src="../_images/math/0062c26909b3e07ee8f5a6285b2563d69bc979ff.png" alt="Y"/> only depends on <img class="math" src="../_images/math/7a7bb470119808e2db2879fc2b2526f467b7a40b.png" alt="X"/> through a linear combination of the
 first two features: <img class="math" src="../_images/math/5bad01f33cf6b6aee8fad0337b89b1741b15d562.png" alt="X_1 + X_2"/>. This is a one-dimensional
-subspace. The methods in <code class="docutils literal"><span class="pre">sliced</span></code> try to find this subspace.</p>
-<p>Let’s see how <code class="docutils literal"><span class="pre">sliced</span></code> finds this subspace. We start by generating the
+subspace. The methods in <code class="docutils literal notranslate"><span class="pre">sliced</span></code> try to find this subspace.</p>
+<p>Let’s see how <code class="docutils literal notranslate"><span class="pre">sliced</span></code> finds this subspace. We start by generating the
 dataset described above. It is example dataset included in the
-<code class="docutils literal"><span class="pre">sliced</span></code> package:</p>
+<code class="docutils literal notranslate"><span class="pre">sliced</span></code> package:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">sliced.datasets</span> <span class="k">import</span> <span class="n">make_cubic</span>
 
 <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_cubic</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
@@ -324,11 +315,11 @@ dataset described above. It is example dataset included in the
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>Out[2]:
 </pre></div>
 </div>
-<div class="output_area highlight-none"><div class="highlight"><pre>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
 <span></span>(500, 10)
 </pre></div>
 </div>
@@ -337,11 +328,11 @@ dataset described above. It is example dataset included in the
 normally do not know that <img class="math" src="../_images/math/3362680381e165e1e5ba7d02e55e09d198290431.png" alt="X_1"/> and <img class="math" src="../_images/math/6a2b7e3a7c036f38cbe76c1b4617c7687f4eafcc.png" alt="X_2"/> contain all the
 information about the target.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">plot_trisurf</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">,</span>
                 <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
@@ -351,12 +342,12 @@ information about the target.</p>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>Out[3]:
 </pre></div>
 </div>
-<div class="output_area highlight-none"><div class="highlight"><pre>
-<span></span>&lt;mpl_toolkits.mplot3d.art3d.Path3DCollection at 0x2b04158541d0&gt;
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>&lt;mpl_toolkits.mplot3d.art3d.Path3DCollection at 0x2b22eed47898&gt;
 </pre></div>
 </div>
 </div>
@@ -368,44 +359,44 @@ information about the target.</p>
 </div>
 </div>
 <p>To learn a low dimensional representation we use the
-<code class="docutils literal"><span class="pre">SlicedInverseRegression</span></code> algorithm found in <code class="docutils literal"><span class="pre">sliced</span></code>. Fitting the
+<code class="docutils literal notranslate"><span class="pre">SlicedInverseRegression</span></code> algorithm found in <code class="docutils literal notranslate"><span class="pre">sliced</span></code>. Fitting the
 algorithms is easy since it adheres to the sklearn transformer API. A
-single hyperparameter <code class="docutils literal"><span class="pre">n_components</span></code> indicates the dimension of the
+single hyperparameter <code class="docutils literal notranslate"><span class="pre">n_directions</span></code> indicates the dimension of the
 subspace. In this case we want a single direction, so we set
-<code class="docutils literal"><span class="pre">n_components=1</span></code>. The <code class="docutils literal"><span class="pre">components_</span></code> attribute stores the estimated
+<code class="docutils literal notranslate"><span class="pre">n_directions=1</span></code>. The <code class="docutils literal notranslate"><span class="pre">directions_</span></code> attribute stores the estimated
 direction of the subspace once the algorithm is fit. The following fits
 the SIR algorithm:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">sliced</span> <span class="k">import</span> <span class="n">SlicedInverseRegression</span>
 
-<span class="n">sir</span> <span class="o">=</span> <span class="n">SlicedInverseRegression</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">sir</span> <span class="o">=</span> <span class="n">SlicedInverseRegression</span><span class="p">(</span><span class="n">n_directions</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">sir</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>Out[4]:
 </pre></div>
 </div>
-<div class="output_area highlight-none"><div class="highlight"><pre>
-<span></span>SlicedInverseRegression(copy=True, n_components=1, n_slices=10)
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>SlicedInverseRegression(copy=True, n_directions=1, n_slices=10)
 </pre></div>
 </div>
 </div>
-<p>To actually perform the dimension reduction we call the <code class="docutils literal"><span class="pre">transform</span></code>
+<p>To actually perform the dimension reduction we call the <code class="docutils literal notranslate"><span class="pre">transform</span></code>
 method on the data:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">X_sir</span> <span class="o">=</span> <span class="n">sir</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_sir</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="p">,</span>
@@ -416,11 +407,11 @@ method on the data:</p>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>Out[5]:
 </pre></div>
 </div>
-<div class="output_area highlight-none"><div class="highlight"><pre>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
 <span></span>Text(0,0.5,&#39;y&#39;)
 </pre></div>
 </div>
@@ -433,7 +424,7 @@ method on the data:</p>
 </div>
 </div>
 <p>The cubic structure is accuratly identified with a single feature.
-<code class="docutils literal"><span class="pre">sliced</span></code> reduced the dimension of the dataset from 10 to 1!</p>
+<code class="docutils literal notranslate"><span class="pre">sliced</span></code> reduced the dimension of the dataset from 10 to 1!</p>
 </div>
 
 
@@ -449,7 +440,7 @@ method on the data:</p>
     </p>
     <p>
         &copy; Copyright 2018, Joshua Loyal.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.3.<br/>
     </p>
   </div>
 </footer>

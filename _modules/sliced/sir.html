@@ -2,6 +2,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>sliced.sir &#8212; sliced 0.1.0 documentation</title>
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
@@ -9,16 +10,7 @@
     <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '0.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
@@ -33,8 +25,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
-  </head>
-  <body>
+  </head><body>
 
 <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
   <div class="container">
@@ -101,27 +92,22 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 
+<span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy.linalg</span> <span class="k">as</span> <span class="nn">linalg</span>
 
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">sparse</span>
-<span class="kn">from</span> <span class="nn">sklearn.discriminant_analysis</span> <span class="k">import</span> <span class="n">_cov</span>
 <span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="k">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="k">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">check_X_y</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="k">import</span> <span class="n">check_is_fitted</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">normalize</span>
 
-<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">whiten_X</span><span class="p">,</span> <span class="n">slice_X</span><span class="p">,</span> <span class="n">is_multioutput</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">slice_y</span><span class="p">,</span> <span class="n">grouped_sum</span><span class="p">,</span> <span class="n">is_multioutput</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SlicedInverseRegression&#39;</span><span class="p">]</span>
-
-
-<span class="k">def</span> <span class="nf">grouped_sum</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">groups</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Sums an array by groups. Groups are assumed to be contiguous by row.&quot;&quot;&quot;</span>
-    <span class="n">inv_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(([</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">groups</span><span class="p">)</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()[</span><span class="mi">0</span><span class="p">]))</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="o">.</span><span class="n">reduceat</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">inv_idx</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="SlicedInverseRegression"><a class="viewcode-back" href="../../generated/sliced.sir.SlicedInverseRegression.html#sliced.sir.SlicedInverseRegression">[docs]</a><span class="k">class</span> <span class="nc">SlicedInverseRegression</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span><span class="p">):</span>
@@ -150,17 +136,17 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    n_components : int, str or None (default=&#39;auto&#39;)</span>
+<span class="sd">    n_directions : int, str or None (default=&#39;auto&#39;)</span>
 <span class="sd">        Number of directions to keep. Corresponds to the dimension of</span>
-<span class="sd">        the central subpace. If n_components==&#39;auto&#39;, the number of components</span>
+<span class="sd">        the central subpace. If n_directions==&#39;auto&#39;, the number of directions</span>
 <span class="sd">        is chosen by finding the maximum gap in the ordered eigenvalues of</span>
-<span class="sd">        the var(X|y) matrix and choosing the components before this gap.</span>
-<span class="sd">        If n_components==None, the number of components equals the number of</span>
+<span class="sd">        the var(X|y) matrix and choosing the directions before this gap.</span>
+<span class="sd">        If n_directions==None, the number of directions equals the number of</span>
 <span class="sd">        features.</span>
 
 <span class="sd">    n_slices : int (default=10)</span>
 <span class="sd">        The number of slices used when calculating the inverse regression</span>
-<span class="sd">        curve. Should be &lt;= the number of unique values of ``y``.</span>
+<span class="sd">        curve. Truncated to at most the number of unique values of ``y``.</span>
 
 <span class="sd">    copy : bool (default=True)</span>
 <span class="sd">         If False, data passed to fit are overwritten and running</span>
@@ -169,14 +155,14 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    components_ : array, shape (n_components, n_features)</span>
+<span class="sd">    directions_ : array, shape (n_directions, n_features)</span>
 <span class="sd">        The directions in feature space, representing the</span>
 <span class="sd">        central subspace which is sufficient to describe the conditional</span>
-<span class="sd">        distribution y|X. The components are sorted by ``singular_values_``.</span>
+<span class="sd">        distribution y|X. The directions are sorted by ``eigenvalues_``.</span>
 
-<span class="sd">    singular_values_ : array, shape (n_components,)</span>
-<span class="sd">        The singular values corresponding to each of the selected components.</span>
-<span class="sd">        These are equivalent to the eigenvalues of the covariance matrix</span>
+<span class="sd">    eigenvalues_ : array, shape (n_directions,)</span>
+<span class="sd">        The eigenvalues corresponding to each of the selected directions.</span>
+<span class="sd">        These are the eigenvalues of the covariance matrix</span>
 <span class="sd">        of the inverse regression curve. Larger eigenvalues indicate</span>
 <span class="sd">        more prevelant directions.</span>
 
@@ -187,9 +173,9 @@
 <span class="sd">    &gt;&gt;&gt; from sliced import SlicedInverseRegression</span>
 <span class="sd">    &gt;&gt;&gt; from sliced.datasets import make_cubic</span>
 <span class="sd">    &gt;&gt;&gt; X, y = make_cubic(random_state=123)</span>
-<span class="sd">    &gt;&gt;&gt; sir = SlicedInverseRegression(n_components=2)</span>
+<span class="sd">    &gt;&gt;&gt; sir = SlicedInverseRegression(n_directions=2)</span>
 <span class="sd">    &gt;&gt;&gt; sir.fit(X, y)</span>
-<span class="sd">    SlicedInverseRegression(copy=True, n_components=2, n_slices=10)</span>
+<span class="sd">    SlicedInverseRegression(copy=True, n_directions=2, n_slices=10)</span>
 <span class="sd">    &gt;&gt;&gt; X_sir = sir.transform(X)</span>
 
 <span class="sd">    References</span>
@@ -199,8 +185,8 @@
 <span class="sd">        &quot;Sliced Inverse Regression for Dimension Reduction (with discussion)&quot;,</span>
 <span class="sd">        Journal of the American Statistical Association, 86, 316-342.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="SlicedInverseRegression.__init__"><a class="viewcode-back" href="../../generated/sliced.sir.SlicedInverseRegression.html#sliced.sir.SlicedInverseRegression.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">n_slices</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_components</span> <span class="o">=</span> <span class="n">n_components</span>
+<div class="viewcode-block" id="SlicedInverseRegression.__init__"><a class="viewcode-back" href="../../generated/sliced.sir.SlicedInverseRegression.html#sliced.sir.SlicedInverseRegression.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_directions</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">n_slices</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_directions</span> <span class="o">=</span> <span class="n">n_directions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_slices</span> <span class="o">=</span> <span class="n">n_slices</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">copy</span> <span class="o">=</span> <span class="n">copy</span></div>
 
@@ -230,55 +216,67 @@
                          <span class="n">accept_sparse</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;csr&#39;</span><span class="p">],</span>
                          <span class="n">y_numeric</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">)</span>
 
-        <span class="c1"># handle n_components == None</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_components</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">n_components_</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_directions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">n_directions</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_directions</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">)</span> <span class="ow">and</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">n_directions</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The number of directions `n_directions` &#39;</span>
+                             <span class="s1">&#39;must be &gt;= 1. Got `n_directions`=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">n_directions</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">n_components_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_components</span>
+            <span class="n">n_directions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_directions</span>
 
         <span class="c1"># validate y</span>
         <span class="k">if</span> <span class="n">is_multioutput</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The target `y` cannot be multi-output.&quot;</span><span class="p">)</span>
 
-        <span class="c1"># `n_slices` must be less-than or equal to the number of unique values</span>
-        <span class="c1"># of `y`.</span>
-        <span class="n">n_y_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">n_y_values</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The target only has one unique y value. It does &quot;</span>
-                             <span class="s2">&quot;not make sense to fit SIR in this case.&quot;</span><span class="p">)</span>
+        <span class="n">n_samples</span><span class="p">,</span> <span class="n">n_features</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_slices</span> <span class="o">&gt;</span> <span class="n">n_y_values</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;n_slices greater than number of unique y values. &quot;</span>
-                          <span class="s2">&quot;Setting n_slices equal to </span><span class="si">{0}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n_y_values</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">n_slices_</span> <span class="o">=</span> <span class="n">n_y_values</span>
+        <span class="c1"># Center and Whiten feature matrix using a QR decomposition</span>
+        <span class="c1"># (this is the approach used in the dr package)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">X</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">n_slices_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_slices</span>
-
-        <span class="c1"># Center and Whiten feature matrix using the cholesky decomposition</span>
-        <span class="c1"># (the original implementation uses QR, but this has numeric errors).</span>
-        <span class="n">Z</span><span class="p">,</span> <span class="n">sigma_inv</span> <span class="o">=</span> <span class="n">whiten_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;cholesky&#39;</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-        <span class="c1"># sort rows of Z with respect to y</span>
+            <span class="n">X</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">Q</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;economic&#39;</span><span class="p">)</span>
+        <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span> <span class="o">*</span> <span class="n">Q</span>
         <span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="p">:]</span>
 
         <span class="c1"># determine slice indices and counts per slice</span>
-        <span class="n">slices</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">slice_X</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_slices_</span><span class="p">)</span>
+        <span class="n">slices</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">slice_y</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_slices</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_slices_</span> <span class="o">=</span> <span class="n">counts</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="c1"># means in each slice (sqrt factor takes care of the weighting)</span>
         <span class="n">Z_means</span> <span class="o">=</span> <span class="n">grouped_sum</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">slices</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Z_means</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">Z_means</span><span class="p">)</span> <span class="o">/</span> <span class="n">n_samples</span>
 
-        <span class="c1"># PCA of slice matrix</span>
-        <span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">Z_means</span><span class="p">,</span> <span class="n">full_matrices</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">components</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">sigma_inv</span><span class="p">)</span>
-        <span class="n">singular_values</span> <span class="o">=</span> <span class="p">(</span><span class="n">S</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="c1"># eigen-decomposition of slice matrix</span>
+        <span class="n">evals</span><span class="p">,</span> <span class="n">evecs</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+        <span class="n">evecs</span> <span class="o">=</span> <span class="n">evecs</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">evals</span> <span class="o">=</span> <span class="n">evals</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># TODO: internally handle zero variance features. This would not</span>
+            <span class="c1"># be a problem if we used svd, but does not match DR.</span>
+            <span class="n">directions</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">solve_triangular</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span> <span class="o">*</span> <span class="n">R</span><span class="p">,</span> <span class="n">evecs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">linalg</span><span class="o">.</span><span class="n">LinAlgError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="c1"># NOTE: The TypeError is because of a bug in the reporting of scipy</span>
+            <span class="k">raise</span> <span class="n">linalg</span><span class="o">.</span><span class="n">LinAlgError</span><span class="p">(</span>
+                <span class="s2">&quot;Unable to back-solve R for the dimension &quot;</span>
+                <span class="s2">&quot;reducing directions. This is usually caused by the presents &quot;</span>
+                <span class="s2">&quot;of zero variance features. Try removing these features with &quot;</span>
+                <span class="s2">&quot;`sklearn.feature_selection.VarianceThreshold(threshold=0.)` &quot;</span>
+                <span class="s2">&quot;and refitting.&quot;</span><span class="p">)</span>
 
-        <span class="c1"># the number of components is chosen by finding the maximum gap among</span>
+        <span class="c1"># the number of directions is chosen by finding the maximum gap among</span>
         <span class="c1"># the ordered eigenvalues.</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_components_</span> <span class="o">==</span> <span class="s1">&#39;auto&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">n_components_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">singular_values</span><span class="p">)))</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_directions</span> <span class="o">==</span> <span class="s1">&#39;auto&#39;</span><span class="p">:</span>
+            <span class="n">n_directions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">evals</span><span class="p">)))</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_directions_</span> <span class="o">=</span> <span class="n">n_directions</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">components_</span> <span class="o">=</span> <span class="n">components</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_components_</span><span class="p">,</span> <span class="p">:]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">singular_values_</span> <span class="o">=</span> <span class="n">singular_values</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_components_</span><span class="p">]</span>
+        <span class="n">directions</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span>
+            <span class="n">directions</span><span class="p">[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_directions_</span><span class="p">],</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">directions_</span> <span class="o">=</span> <span class="n">directions</span><span class="o">.</span><span class="n">T</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eigenvalues_</span> <span class="o">=</span> <span class="n">evals</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_directions_</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="bp">self</span>
 
@@ -297,13 +295,13 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        X_new : array-like, shape (n_samples, n_components)</span>
+<span class="sd">        X_new : array-like, shape (n_samples, n_directions)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;components_&#39;</span><span class="p">)</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;directions_&#39;</span><span class="p">)</span>
 
         <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">T</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">directions_</span><span class="o">.</span><span class="n">T</span><span class="p">)</span></div>
 </pre></div>
 
     </div>
@@ -318,7 +316,7 @@
     </p>
     <p>
         &copy; Copyright 2018, Joshua Loyal.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.3.<br/>
     </p>
   </div>
 </footer>
