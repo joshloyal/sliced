@@ -45,7 +45,7 @@ Example that shows how to learn a one dimensional subspace from a dataset with t
    X, y = make_cubic(random_state=123)
 
    # Set the options for SIR
-   sir = SlicedInverseRegression(n_components=1)
+   sir = SlicedInverseRegression(n_directions=1)
 
    # fit the model
    sir.fit(X, y)

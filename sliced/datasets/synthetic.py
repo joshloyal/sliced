@@ -7,6 +7,10 @@ import numpy as np
 from sklearn.utils import check_random_state
 
 
+__all__ = ['make_cubic', 'make_quadratic', 'make_polynomial',
+           'make_exponential']
+
+
 def make_cubic(n_samples=500, n_features=10, n_informative=2,
                random_state=None):
     """Generates a dataset with a cubic response curve.
