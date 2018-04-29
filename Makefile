@@ -5,7 +5,7 @@ PYTEST ?= pytest
 
 clean:
 	$(PYTHON) setup.py clean
-	rem -rf dist
+	rm -rf dist
 
 install-dev:
 	$(PYTHON) setup.py develop
