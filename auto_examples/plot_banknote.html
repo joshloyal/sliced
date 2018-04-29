@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Sliced Average Variance Estimation" href="plot_save.html" />
-    <link rel="prev" title="Binary Targets with SIR" href="breast_cancer.html" />
+    <link rel="prev" title="Binary Targets with SIR" href="plot_breast_cancer.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -66,7 +66,7 @@
             <ul class='nav navbar-nav navbar-right'>
                 
   <li>
-    <a href="breast_cancer.html" title="Previous Chapter: Binary Targets with SIR"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Binary Targets with SIR</span>
+    <a href="plot_breast_cancer.html" title="Previous Chapter: Binary Targets with SIR"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Binary Targets with SIR</span>
     </a>
   </li>
   <li>
@@ -99,12 +99,13 @@
       
   <div class="sphx-glr-download-link-note admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Click <a class="reference internal" href="#sphx-glr-download-auto-examples-banknote-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+<p class="last">Click <a class="reference internal" href="#sphx-glr-download-auto-examples-plot-banknote-py"><span class="std std-ref">here</span></a> to download the full example code</p>
 </div>
 <div class="sphx-glr-example-title section" id="clustering-with-save">
-<span id="sphx-glr-auto-examples-banknote-py"></span><h1>Clustering with SAVE<a class="headerlink" href="#clustering-with-save" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-auto-examples-plot-banknote-py"></span><h1>Clustering with SAVE<a class="headerlink" href="#clustering-with-save" title="Permalink to this headline">¶</a></h1>
 <p>Sliced Average Variance Estimation is able to find three distinct clusters
 in a dataset used to classify counterfeit swiss banknotes.</p>
+<img alt="../_images/sphx_glr_plot_banknote_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_banknote_001.png" />
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 
 <span class="kn">from</span> <span class="nn">sliced.datasets</span> <span class="kn">import</span> <span class="n">load_banknote</span>
@@ -116,7 +117,7 @@ in a dataset used to classify counterfeit swiss banknotes.</p>
 <span class="n">save</span> <span class="o">=</span> <span class="n">SlicedAverageVarianceEstimation</span><span class="p">(</span><span class="n">n_directions</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_slices</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">X_save</span> <span class="o">=</span> <span class="n">save</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_save</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_save</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_save</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_save</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$X\hat{</span><span class="se">\\</span><span class="s2">beta}_{1}$&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$X\hat{</span><span class="se">\\</span><span class="s2">beta}_{2}$&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Swiss Banknote Data&quot;</span><span class="p">)</span>
@@ -124,12 +125,12 @@ in a dataset used to classify counterfeit swiss banknotes.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
-<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-banknote-py">
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.028 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-banknote-py">
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../_downloads/banknote.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">banknote.py</span></code></a></div>
+<a class="reference download internal" href="../_downloads/plot_banknote.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_banknote.py</span></code></a></div>
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../_downloads/banknote.ipynb" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">banknote.ipynb</span></code></a></div>
+<a class="reference download internal" href="../_downloads/plot_banknote.ipynb" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_banknote.ipynb</span></code></a></div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>

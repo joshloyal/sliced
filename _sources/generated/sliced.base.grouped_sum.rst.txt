@@ -1,0 +1,6 @@
+sliced.base.grouped\_sum
+========================
+
+.. currentmodule:: sliced.base
+
+.. autofunction:: grouped_sum

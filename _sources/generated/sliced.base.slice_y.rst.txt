@@ -1,0 +1,6 @@
+sliced.base.slice\_y
+====================
+
+.. currentmodule:: sliced.base
+
+.. autofunction:: slice_y

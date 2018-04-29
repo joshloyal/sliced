@@ -34,4 +34,5 @@ Utilities
 .. autosummary::
     :toctree: generated/
 
-    base.whiten_X
+    base.grouped_sum
+    base.slice_y

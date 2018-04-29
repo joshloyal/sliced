@@ -1,10 +1,10 @@
 .. note::
     :class: sphx-glr-download-link-note
 
-    Click :ref:`here <sphx_glr_download_auto_examples_banknote.py>` to download the full example code
+    Click :ref:`here <sphx_glr_download_auto_examples_plot_banknote.py>` to download the full example code
 .. rst-class:: sphx-glr-example-title
 
-.. _sphx_glr_auto_examples_banknote.py:
+.. _sphx_glr_auto_examples_plot_banknote.py:
 
 
 ====================
@@ -13,6 +13,14 @@ Clustering with SAVE
 
 Sliced Average Variance Estimation is able to find three distinct clusters
 in a dataset used to classify counterfeit swiss banknotes.
+
+
+
+
+.. image:: /auto_examples/images/sphx_glr_plot_banknote_001.png
+    :class: sphx-glr-single-img
+
+
 
 
 
@@ -29,17 +37,17 @@ in a dataset used to classify counterfeit swiss banknotes.
     save = SlicedAverageVarianceEstimation(n_directions=2, n_slices=2)
     X_save = save.fit_transform(X, y)
 
-    plt.scatter(X_save[:, 0], X_save[:, 1], c=y, alpha=0.5, edgecolor='k')
+    plt.scatter(X_save[:, 0], X_save[:, 1], c=y, alpha=0.8, edgecolor='k')
     plt.xlabel("$X\hat{\\beta}_{1}$")
     plt.ylabel("$X\hat{\\beta}_{2}$")
     plt.title("Swiss Banknote Data")
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+**Total running time of the script:** ( 0 minutes  0.028 seconds)
 
 
-.. _sphx_glr_download_auto_examples_banknote.py:
+.. _sphx_glr_download_auto_examples_plot_banknote.py:
 
 
 .. only :: html
@@ -51,13 +59,13 @@ in a dataset used to classify counterfeit swiss banknotes.
 
   .. container:: sphx-glr-download
 
-     :download:`Download Python source code: banknote.py <banknote.py>`
+     :download:`Download Python source code: plot_banknote.py <plot_banknote.py>`
 
 
 
   .. container:: sphx-glr-download
 
-     :download:`Download Jupyter notebook: banknote.ipynb <banknote.ipynb>`
+     :download:`Download Jupyter notebook: plot_banknote.ipynb <plot_banknote.ipynb>`
 
 
 .. only:: html
