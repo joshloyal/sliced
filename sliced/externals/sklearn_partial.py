@@ -10,10 +10,31 @@
 
 import warnings
 import numbers
+import six
 
 import numpy as np
 import scipy.sparse as sp
 from numpy.core.numeric import ComplexWarning
+
+
+class NotFittedError(ValueError, AttributeError):
+    """Exception class to raise if estimator is used before fitting.
+    This class inherits from both ValueError and AttributeError to help with
+    exception handling and backward compatibility.
+    Examples
+    --------
+    >>> from sklearn.svm import LinearSVC
+    >>> from sklearn.exceptions import NotFittedError
+    >>> try:
+    ...     LinearSVC().predict([[1, 2], [2, 3], [3, 4]])
+    ... except NotFittedError as e:
+    ...     print(repr(e))
+    ...                        # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
+    NotFittedError('This LinearSVC instance is not fitted yet',)
+
+    .. versionchanged:: 0.18
+       Moved from sklearn.utils.validation.
+   """
 
 
 def _assert_all_finite(X, allow_nan=False):
@@ -181,6 +202,24 @@ def _ensure_no_complex_data(array):
             and hasattr(array.dtype, 'kind') and array.dtype.kind == "c":
         raise ValueError("Complex data not supported\n"
                          "{}\n".format(array))
+
+
+def check_consistent_length(*arrays):
+    """Check that all arrays have consistent first dimensions.
+
+    Checks whether all objects in arrays have the same shape or length.
+
+    Parameters
+    ----------
+    *arrays : list or tuple of input objects.
+        Objects that will be checked for consistent length.
+    """
+
+    lengths = [_num_samples(X) for X in arrays if X is not None]
+    uniques = np.unique(lengths)
+    if len(uniques) > 1:
+        raise ValueError("Found input variables with inconsistent numbers of"
+                         " samples: %r" % [int(l) for l in lengths])
 
 
 def check_array(array, accept_sparse=False, dtype="numeric", order=None,
@@ -601,4 +640,4 @@ def check_is_fitted(estimator, attributes, msg=None, all_or_any=all):
         attributes = [attributes]
 
     if not all_or_any([hasattr(estimator, attr) for attr in attributes]):
-        raise ValueError(msg % {'name': type(estimator).__name__})
+        raise NotFittedError(msg % {'name': type(estimator).__name__})
