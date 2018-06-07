@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 from sliced import datasets
 from sliced import base
+from sliced import externals
 
 from sliced.sir import *
 from sliced.save import *

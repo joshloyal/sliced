@@ -10,10 +10,9 @@ import scipy.linalg as linalg
 
 from scipy import sparse
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.utils import check_array, check_X_y
-from sklearn.utils.validation import check_is_fitted
 from sklearn.preprocessing import normalize
 
+from .externals import check_array, check_X_y, check_is_fitted
 from .base import slice_y, is_multioutput
 
 
