@@ -10,6 +10,7 @@ import pytest
 from scipy import sparse
 from scipy import linalg
 from sklearn.datasets import load_digits
+from sklearn.datasets import load_breast_cancer
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 
 from sliced import SlicedInverseRegression
@@ -140,3 +141,69 @@ def test_matches_athletes():
 
     np.testing.assert_allclose(
         sir.directions_, expected_directions)
+
+
+def test_errors_alpha_out_of_bounds():
+    X, y = datasets.make_cubic(random_state=123)
+
+    sir = SlicedInverseRegression(alpha=10)
+
+    with pytest.raises(ValueError):
+        sir.fit(X, y)
+
+
+def test_sparse_coefficient():
+    """Test the component-wise t-test works on a simple synthetic dataset.
+    """
+    rng = np.random.RandomState(123)
+
+    n_samples = 300
+    n_features = 6
+    X = rng.randn(n_samples, n_features)
+    noise =rng.randn(n_samples).reshape(-1, 1)
+    beta = np.array([1, 0, 0, -1, 0, 0]).reshape(-1, 1)
+    y = np.exp(-0.75 * np.dot(X, beta)) + 0.5 * noise
+
+    sir = SlicedInverseRegression(alpha=0.05)
+    sir.fit(X, y.ravel())
+
+    np.testing.assert_array_equal(
+        sir.directions_.ravel() != 0, beta.ravel() != 0)
+
+
+def test_sparse_coefficient_multiple_dimensions():
+    """Perform the t-test on a dataset with two directions.
+    """
+    rng = np.random.RandomState(123)
+
+    n_samples = 300
+    n_features = 15
+    beta = np.zeros((2, n_features))
+    beta[0, :9] = 1
+    beta[1, 9:] = 1
+    X = rng.randn(n_samples, n_features)
+    y = (np.sign(np.dot(X, beta[0, :])) *
+            np.log(np.abs(np.dot(X, beta[1, :]) + 5)))
+
+    sir = SlicedInverseRegression(n_directions=2, alpha=0.05)
+    sir.fit(X, y.ravel())
+
+    # the first dimension is found without error
+    np.testing.assert_array_equal(
+        sir.directions_[1, :].ravel() != 0, beta[0, :].ravel() != 0)
+
+    # the second dimension picks up a few spurious coefficients
+    assert np.all(sir.directions_[0, :].ravel()[9:] != 0)
+
+
+def test_all_zero_coefficients_warns_and_does_not_zero_out():
+    """To avoid errors a t-test that indicates that all coefficients are
+    zero will not zero-out the directions vector.
+    """
+    X, y = load_breast_cancer(return_X_y=True)
+    sir = SlicedInverseRegression(n_directions=2, alpha=0.05)
+
+    with pytest.warns(RuntimeWarning):
+        sir.fit(X, y)
+
+    assert np.any(sir.directions_ != 0)
