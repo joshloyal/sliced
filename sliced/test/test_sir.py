@@ -160,7 +160,7 @@ def test_sparse_coefficient():
     n_samples = 300
     n_features = 6
     X = rng.randn(n_samples, n_features)
-    noise =rng.randn(n_samples).reshape(-1, 1)
+    noise = rng.randn(n_samples).reshape(-1, 1)
     beta = np.array([1, 0, 0, -1, 0, 0]).reshape(-1, 1)
     y = np.exp(-0.75 * np.dot(X, beta)) + 0.5 * noise
 
@@ -183,7 +183,7 @@ def test_sparse_coefficient_multiple_dimensions():
     beta[1, 9:] = 1
     X = rng.randn(n_samples, n_features)
     y = (np.sign(np.dot(X, beta[0, :])) *
-            np.log(np.abs(np.dot(X, beta[1, :]) + 5)))
+         np.log(np.abs(np.dot(X, beta[1, :]) + 5)))
 
     sir = SlicedInverseRegression(n_directions=2, alpha=0.05)
     sir.fit(X, y.ravel())
