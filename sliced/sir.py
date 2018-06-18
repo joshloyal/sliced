@@ -7,6 +7,7 @@ import warnings
 
 import numpy as np
 import scipy.linalg as linalg
+import scipy.stats as stats
 
 from scipy import sparse
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -17,6 +18,32 @@ from .base import slice_y, grouped_sum, is_multioutput
 
 
 __all__ = ['SlicedInverseRegression']
+
+
+def diagonal_precision(X, R=None):
+    """Calculate he diagonal elements of the empirical precision matrix
+    from a pre-computed QR decomposition of the centered data matrix X.
+
+    Parameters
+    ----------
+    X : numpy-array, shape (n_samples, n_features)
+        The centered data matrix.
+
+    R : numpy-array, shape (n_features, n_features), optional
+        The upper triangular matrix obtained by the economic QR decomposition
+        of the centered data matrix.
+
+    Returns
+    -------
+    precisions : numpy-array, shape (n_features,)
+        The diagonal elements of the precision (inverse covariance) matrix of
+        the centered data.
+    """
+    if R is None:
+        Q, R = linalg.qr(X, mode='economic')
+
+    R_inv = linalg.solve_triangular(R, np.eye(R.shape[1]))
+    return np.sum(R_inv ** 2, axis=1) * X.shape[0]
 
 
 class SlicedInverseRegression(BaseEstimator, TransformerMixin):
@@ -57,6 +84,13 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
         The number of slices used when calculating the inverse regression
         curve. Truncated to at most the number of unique values of ``y``.
 
+    alpha : float or None (default=None)
+        Significance level for the two-sided t-test used to check for
+        non-zero coefficients. Must be a number between 0 and 1. If not
+        `None`, the non-zero components of each direction are determined
+        from an asymptotic normal approximation. Useful if one desires that
+        the directions are sparse in the number of features.
+
     copy : bool (default=True)
          If False, data passed to fit are overwritten and running
          fit(X).transform(X) will not yield the expected results,
@@ -73,7 +107,7 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
         The eigenvalues corresponding to each of the selected directions.
         These are the eigenvalues of the covariance matrix
         of the inverse regression curve. Larger eigenvalues indicate
-        more prevelant directions.
+        more prevalent directions.
 
     Examples
     --------
@@ -84,7 +118,7 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
     >>> X, y = make_cubic(random_state=123)
     >>> sir = SlicedInverseRegression(n_directions=2)
     >>> sir.fit(X, y)
-    SlicedInverseRegression(copy=True, n_directions=2, n_slices=10)
+    SlicedInverseRegression(alpha=None, copy=True, n_directions=2, n_slices=10)
     >>> X_sir = sir.transform(X)
 
     References
@@ -93,10 +127,13 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
     [1] Li, K C. (1991)
         "Sliced Inverse Regression for Dimension Reduction (with discussion)",
         Journal of the American Statistical Association, 86, 316-342.
+    [2] Chen, C.H., and Li, K.C. (1998), "Can SIR Be as Popular as Multiple
+        Linear Regression?" Statistica Sinica, 8, 289-316.
     """
-    def __init__(self, n_directions='auto', n_slices=10, copy=True):
+    def __init__(self, n_directions='auto', n_slices=10, alpha=None, copy=True):
         self.n_directions = n_directions
         self.n_slices = n_slices
+        self.alpha = alpha
         self.copy = copy
 
     def fit(self, X, y):
@@ -134,6 +171,11 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
                                 self.n_directions))
         else:
             n_directions = self.n_directions
+
+        if self.alpha is not None and (self.alpha <= 0 or self.alpha >= 1):
+            raise ValueError("The significance level `alpha` "
+                             "must be between 0 and 1. Got `alpha`={}".format(
+                                self.alpha))
 
         # validate y
         if is_multioutput(y):
@@ -186,6 +228,32 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
             directions[:, :self.n_directions_], norm='l2', axis=0)
         self.directions_ = directions.T
         self.eigenvalues_ = evals[:self.n_directions_]
+
+        # Drop components in each direction using the t-ratio approach
+        # suggested in section 4 of Chen and Li (1998).
+        if self.alpha is not None:
+            # similar to multiple linear-regression the standard error
+            # estimates are proportional to the diagonals of the inverse
+            # covariance matrix.
+            precs = diagonal_precision(X, R=R)
+            weights = (1 - self.eigenvalues_) / (n_samples * self.eigenvalues_)
+            std_error = np.sqrt(weights.reshape(-1, 1) * precs)
+
+            # perform a two-sided t-test at level alpha for coefs equal to zero
+            # NOTE: we are not correcting for multiple tests and this is
+            #       a very rough approximation, so do not expect the test
+            #       to be close to the nominal level.
+            df = n_samples - n_features - 1
+            crit_val = stats.distributions.t.ppf(1 - self.alpha/2, df)
+            for j in range(self.n_directions_):
+                test_stat = np.abs(self.directions_[j, :] / std_error[j])
+                zero_mask = test_stat < crit_val
+                if np.sum(zero_mask) == n_features:
+                    warnings.warn("Not zeroing out coefficients. All "
+                                  "coefficients are not significantly "
+                                  "different from zero.", RuntimeWarning)
+                else:
+                    self.directions_[j, test_stat < crit_val] = 0.
 
         return self
 
