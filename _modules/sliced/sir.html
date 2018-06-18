@@ -97,6 +97,7 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy.linalg</span> <span class="k">as</span> <span class="nn">linalg</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
 
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">sparse</span>
 <span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="k">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span>
@@ -107,6 +108,32 @@
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SlicedInverseRegression&#39;</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">diagonal_precision</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculate he diagonal elements of the empirical precision matrix</span>
+<span class="sd">    from a pre-computed QR decomposition of the centered data matrix X.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X : numpy-array, shape (n_samples, n_features)</span>
+<span class="sd">        The centered data matrix.</span>
+
+<span class="sd">    R : numpy-array, shape (n_features, n_features), optional</span>
+<span class="sd">        The upper triangular matrix obtained by the economic QR decomposition</span>
+<span class="sd">        of the centered data matrix.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    precisions : numpy-array, shape (n_features,)</span>
+<span class="sd">        The diagonal elements of the precision (inverse covariance) matrix of</span>
+<span class="sd">        the centered data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">R</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">Q</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;economic&#39;</span><span class="p">)</span>
+
+    <span class="n">R_inv</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">solve_triangular</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">R_inv</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="SlicedInverseRegression"><a class="viewcode-back" href="../../generated/sliced.sir.SlicedInverseRegression.html#sliced.sir.SlicedInverseRegression">[docs]</a><span class="k">class</span> <span class="nc">SlicedInverseRegression</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span><span class="p">):</span>
@@ -147,6 +174,13 @@
 <span class="sd">        The number of slices used when calculating the inverse regression</span>
 <span class="sd">        curve. Truncated to at most the number of unique values of ``y``.</span>
 
+<span class="sd">    alpha : float or None (default=None)</span>
+<span class="sd">        Significance level for the two-sided t-test used to check for</span>
+<span class="sd">        non-zero coefficients. Must be a number between 0 and 1. If not</span>
+<span class="sd">        `None`, the non-zero components of each direction are determined</span>
+<span class="sd">        from an asymptotic normal approximation. Useful if one desires that</span>
+<span class="sd">        the directions are sparse in the number of features.</span>
+
 <span class="sd">    copy : bool (default=True)</span>
 <span class="sd">         If False, data passed to fit are overwritten and running</span>
 <span class="sd">         fit(X).transform(X) will not yield the expected results,</span>
@@ -163,7 +197,7 @@
 <span class="sd">        The eigenvalues corresponding to each of the selected directions.</span>
 <span class="sd">        These are the eigenvalues of the covariance matrix</span>
 <span class="sd">        of the inverse regression curve. Larger eigenvalues indicate</span>
-<span class="sd">        more prevelant directions.</span>
+<span class="sd">        more prevalent directions.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -174,7 +208,7 @@
 <span class="sd">    &gt;&gt;&gt; X, y = make_cubic(random_state=123)</span>
 <span class="sd">    &gt;&gt;&gt; sir = SlicedInverseRegression(n_directions=2)</span>
 <span class="sd">    &gt;&gt;&gt; sir.fit(X, y)</span>
-<span class="sd">    SlicedInverseRegression(copy=True, n_directions=2, n_slices=10)</span>
+<span class="sd">    SlicedInverseRegression(alpha=None, copy=True, n_directions=2, n_slices=10)</span>
 <span class="sd">    &gt;&gt;&gt; X_sir = sir.transform(X)</span>
 
 <span class="sd">    References</span>
@@ -183,10 +217,13 @@
 <span class="sd">    [1] Li, K C. (1991)</span>
 <span class="sd">        &quot;Sliced Inverse Regression for Dimension Reduction (with discussion)&quot;,</span>
 <span class="sd">        Journal of the American Statistical Association, 86, 316-342.</span>
+<span class="sd">    [2] Chen, C.H., and Li, K.C. (1998), &quot;Can SIR Be as Popular as Multiple</span>
+<span class="sd">        Linear Regression?&quot; Statistica Sinica, 8, 289-316.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="SlicedInverseRegression.__init__"><a class="viewcode-back" href="../../generated/sliced.sir.SlicedInverseRegression.html#sliced.sir.SlicedInverseRegression.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_directions</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">n_slices</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="SlicedInverseRegression.__init__"><a class="viewcode-back" href="../../generated/sliced.sir.SlicedInverseRegression.html#sliced.sir.SlicedInverseRegression.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_directions</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">n_slices</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_directions</span> <span class="o">=</span> <span class="n">n_directions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_slices</span> <span class="o">=</span> <span class="n">n_slices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">copy</span> <span class="o">=</span> <span class="n">copy</span></div>
 
     <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -224,6 +261,11 @@
                                 <span class="bp">self</span><span class="o">.</span><span class="n">n_directions</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">n_directions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_directions</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The significance level `alpha` &quot;</span>
+                             <span class="s2">&quot;must be between 0 and 1. Got `alpha`=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">))</span>
 
         <span class="c1"># validate y</span>
         <span class="k">if</span> <span class="n">is_multioutput</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
@@ -276,6 +318,32 @@
             <span class="n">directions</span><span class="p">[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_directions_</span><span class="p">],</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">directions_</span> <span class="o">=</span> <span class="n">directions</span><span class="o">.</span><span class="n">T</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eigenvalues_</span> <span class="o">=</span> <span class="n">evals</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_directions_</span><span class="p">]</span>
+
+        <span class="c1"># Drop components in each direction using the t-ratio approach</span>
+        <span class="c1"># suggested in section 4 of Chen and Li (1998).</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># similar to multiple linear-regression the standard error</span>
+            <span class="c1"># estimates are proportional to the diagonals of the inverse</span>
+            <span class="c1"># covariance matrix.</span>
+            <span class="n">precs</span> <span class="o">=</span> <span class="n">diagonal_precision</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">R</span><span class="p">)</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">eigenvalues_</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n_samples</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">eigenvalues_</span><span class="p">)</span>
+            <span class="n">std_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">precs</span><span class="p">)</span>
+
+            <span class="c1"># perform a two-sided t-test at level alpha for coefs equal to zero</span>
+            <span class="c1"># NOTE: we are not correcting for multiple tests and this is</span>
+            <span class="c1">#       a very rough approximation, so do not expect the test</span>
+            <span class="c1">#       to be close to the nominal level.</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">n_samples</span> <span class="o">-</span> <span class="n">n_features</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">crit_val</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_directions_</span><span class="p">):</span>
+                <span class="n">test_stat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directions_</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/</span> <span class="n">std_error</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                <span class="n">zero_mask</span> <span class="o">=</span> <span class="n">test_stat</span> <span class="o">&lt;</span> <span class="n">crit_val</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">zero_mask</span><span class="p">)</span> <span class="o">==</span> <span class="n">n_features</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Not zeroing out coefficients. All &quot;</span>
+                                  <span class="s2">&quot;coefficients are not significantly &quot;</span>
+                                  <span class="s2">&quot;different from zero.&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">directions_</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">test_stat</span> <span class="o">&lt;</span> <span class="n">crit_val</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
 
         <span class="k">return</span> <span class="bp">self</span>
 
