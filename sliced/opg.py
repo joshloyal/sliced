@@ -170,14 +170,14 @@ class OuterProductGradients(BaseEstimator, TransformerMixin):
         K = self._get_kernel(X)
 
         # calculate the gradient estimate through a local wls
-        gradient = np.zeros((n_features, n_samples))
+        gradients = np.zeros((n_features, n_samples))
         for i in range(n_samples):
             linear_model = LinearRegression(fit_intercept=True)
             linear_model.fit(X - X[i, :], y, sample_weight=K[i, :])
-            gradient[:, i] = linear_model.coef_
+            gradients[:, i] = linear_model.coef_
 
         # solve eigen-value problem, i.e. outer product of gradient estimates
-        M = np.dot(gradient, gradient.T)
+        M = np.dot(gradients, gradients.T)
         evals, evecs = linalg.eigh(M)
         evecs = evecs[:, ::-1]
         evals = evals[::-1]
