@@ -5,14 +5,14 @@ from __future__ import print_function
 import numpy as np
 import pytest
 
-from sliced import OuterProductGradient
+from sliced import OuterProductGradients
 from sliced import datasets
 
 
 def test_cubic():
     X, y = datasets.make_cubic(random_state=123)
 
-    odr = OuterProductGradient().fit(X, y)
+    odr = OuterProductGradients().fit(X, y)
     odr.transform(X)
 
     true_beta = (1 / np.sqrt(2)) * np.hstack((np.ones(2), np.zeros(8)))

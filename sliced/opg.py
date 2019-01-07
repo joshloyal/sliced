@@ -17,12 +17,84 @@ from .externals import check_array, check_X_y, check_is_fitted
 from .base import is_multioutput
 
 
-__all__ = ['OuterProductGradient']
+__all__ = ['OuterProductGradients']
 
 
-class OuterProductGradient(BaseEstimator, TransformerMixin):
+class OuterProductGradients(BaseEstimator, TransformerMixin):
+    """Outer Product of Gradients (OPG) [1]
+
+    Forward regression methods estimate the span of the
+    central mean subspace S_{E[y|X]} using ideas from more familiar
+    estimates of the regression function E[y|X]. The advantage of these methods
+    is that they do not need to place distribution assumptions on the predictors
+    X such as SIR or SAVE. However, they rely on high dimension kernel functions
+    which are especially in-efficient for small sample sizes. In addition,
+    they assume the response y is continous.
+
+    The Outer Product of Gradients method of Xia et al (2002) takes advantage
+    of the fact that span{E[grad(E[y|X])grad(E[y|X])^T]} = S_{E[y|X]}. In
+    order to estimate this span, the OPG method estimates the local gradient
+    using local linear regression. The sample expectation of the outer
+    product of estimated gradients is formed, and the spectral decomposition
+    of this product is used to estimated the span of the central mean subspace.
+
+    Parameters
+    ----------
+    n_directions : int, str or None (default='auto')
+        Number of directions to keep. Corresponds to the dimension of
+        the central mean subpace. If n_directions==None,
+        the number of directions equals the number of features.
+
+    kernel : string or callable, default='rbf'
+        Kernel mapping used internally. A callable should accept two arguments
+        and the keyword arguments passed to his object as kernel_params, and
+        should return a floating point number. Set to "precomputed" in order
+        to pass a precomputed kernel matrix to the estimator methods instead of
+        samples.
+
+    gamma : float, default='auto'
+        Gamma parameter for the RBF, laplacian, polynomial, exponential, chi2,
+        and sigmoid kernels. If gamma='auto, the default for the RBF kernel
+        in Xia et al. is used.
+
+    degree : float, default=2
+        Degree of the polynomial kernel. Ignored by other kernels.
+
+    coef0 : float, default=1
+        Zero coefficient for polynomial and sigmoid kernels.
+        Ignored by other kernels.
+
+    kernel_params : mapping of string to any, optional
+        Additional parameters (keyword arguments) for a kernel function
+        passed as a callable object.
+
+    copy : bool (default=True)
+         If False, data passed to fit are overwritten and running
+         fit(X).transform(X) will not yield the expected results,
+         use fit_transform(X) instead.
+
+    Attributes
+    ----------
+    directions_ : array, shape (n_directions, n_features)
+        The directions in feature space, representing the
+        central mean subspace which is sufficient to describe the conditional
+        mean E[y|X]. The directions are sorted by ``eigenvalues_``.
+
+    eigenvalues_ : array, shape (n_directions,)
+        The eigenvalues corresponding to each of the selected directions.
+        These are the eigenvalues of the expected outer product of gradients.
+        Larger eigenvalues indicate more prevalent directions.
+
+    References
+    ----------
+
+    [1] Xia, Y., Tong, H., Li, W. K., and Zhu, L.-X. (2002),
+        “An adaptive estimation of di- mension reduction space,”
+        Journal of the Royal Statistical Society: Series B (Statistical Methodology),
+        64, 363–410.
+    """
     def __init__(self,
-                 n_directions='auto',
+                 n_directions=None,
                  kernel='rbf',
                  gamma='auto',
                  degree=2,
@@ -83,10 +155,8 @@ class OuterProductGradient(BaseEstimator, TransformerMixin):
 
         n_samples, n_features = X.shape
 
-        if isinstance(self.n_directions, six.string_types):
-            self.n_directions_ = X.shape[1]
-        else:
-            self.n_directions_ = self.n_directions
+        self.n_directions_ = (n_features if self.n_directions is None else
+                              self.n_directions)
 
         # validate y
         if is_multioutput(y):
