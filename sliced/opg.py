@@ -48,9 +48,7 @@ class OuterProductGradients(BaseEstimator, TransformerMixin):
     kernel : string or callable, default='rbf'
         Kernel mapping used internally. A callable should accept two arguments
         and the keyword arguments passed to his object as kernel_params, and
-        should return a floating point number. Set to "precomputed" in order
-        to pass a precomputed kernel matrix to the estimator methods instead of
-        samples.
+        should return a floating point number.
 
     gamma : float, default='auto'
         Gamma parameter for the RBF, laplacian, polynomial, exponential, chi2,
@@ -128,7 +126,7 @@ class OuterProductGradients(BaseEstimator, TransformerMixin):
         return pairwise_kernels(X, Y, metric=self.kernel,
                                 filter_params=True, **params)
 
-    def fit(self, X, y):
+    def fit(self, X, y, kernel=None):
         """Fit the model with X and y.
 
         Parameters
@@ -140,6 +138,9 @@ class OuterProductGradients(BaseEstimator, TransformerMixin):
         y : array-like, shape (n_samples,)
             The target values (class labels in classification, real numbers
             in regression).
+
+        kernel : array-like, shape (n_samples, n_samples)
+            Precomputed kernel matrix.
 
         Returns
         -------
@@ -167,7 +168,7 @@ class OuterProductGradients(BaseEstimator, TransformerMixin):
         X = scaler.fit_transform(X)
 
         # pre-compute the kernel weights
-        K = self._get_kernel(X)
+        K = self._get_kernel(X) if kernel is None else kernel
 
         # calculate the gradient estimate through a local wls
         gradients = np.zeros((n_features, n_samples))
