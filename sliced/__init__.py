@@ -9,4 +9,5 @@ from sliced import externals
 
 from sliced.sir import *
 from sliced.save import *
+from sliced.odr import *
 from sliced.version import *
