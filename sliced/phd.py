@@ -143,8 +143,12 @@ class PrincipalHessianDirections(BaseEstimator, TransformerMixin):
 
         # eigen-decomposition to determine the basis
         evals, evecs = linalg.eigh(M)
-        evecs = evecs[:, ::-1]
-        evals = evals[::-1]
+
+        # re-order eigenvectors based on magnitude
+        # NOTE: M is not psd, so eigenvalues may be negative.
+        order = np.argsort(np.abs(evals))[::-1]
+        evecs = evecs[:, order]
+        evals = evals[order]
 
         try:
             # TODO: internally handle zero variance features. This would not

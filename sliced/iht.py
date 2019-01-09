@@ -83,9 +83,14 @@ class IterativeHessianTransformation(BaseEstimator, TransformerMixin):
         for p in range(1, n_features):
             M[:, p] = np.dot(np.linalg.matrix_power(Szzy, p), Szy)
 
+        # eigen-decomposition to determine the basis
         evals, evecs = linalg.eigh(np.dot(M, M.T))
-        evecs = evecs[:, ::-1]
-        evals = evals[::-1]
+
+        # re-order eigenvectors based on magnitude
+        # NOTE: M is not psd, so eigenvalues may be negative.
+        order = np.argsort(np.abs(evals))[::-1]
+        evecs = evecs[:, order]
+        evals = evals[order]
 
         try:
             # TODO: internally handle zero variance features. This would not
