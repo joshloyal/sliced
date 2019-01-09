@@ -10,8 +10,7 @@ import scipy.linalg as linalg
 from scipy import sparse
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics.pairwise import pairwise_kernels
-from sklearn.preprocessing import normalize, StandardScaler
+from sklearn.preprocessing import normalize
 
 from .externals import check_array, check_X_y, check_is_fitted
 from .base import is_multioutput
