@@ -109,6 +109,11 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
         of the inverse regression curve. Larger eigenvalues indicate
         more prevalent directions.
 
+    mean_ : array, shape (n_features,)
+        The column means of the training data used to estimate the basis
+        of the central subspace. Used to project new data onto the
+        central subspace.
+
     Examples
     --------
 
@@ -185,10 +190,11 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
 
         # Center and Whiten feature matrix using a QR decomposition
         # (this is the approach used in the dr package)
+        self.mean_ = np.mean(X, axis=0)
         if self.copy:
-            X = X - np.mean(X, axis=0)
+            X = X - self.mean_
         else:
-            X -= np.mean(X, axis=0)
+            X -= self.mean_
         Q, R = linalg.qr(X, mode='economic')
         Z = np.sqrt(n_samples) * Q
         Z = Z[np.argsort(y), :]
@@ -278,4 +284,4 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
         check_is_fitted(self, 'directions_')
 
         X = check_array(X)
-        return np.dot(X, self.directions_.T)
+        return np.dot(X - self.mean_, self.directions_.T)

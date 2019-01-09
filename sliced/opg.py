@@ -83,6 +83,11 @@ class OuterProductGradients(BaseEstimator, TransformerMixin):
         These are the eigenvalues of the expected outer product of gradients.
         Larger eigenvalues indicate more prevalent directions.
 
+    mean_ : array, shape (n_features,)
+        The column means of the training data used to estimate the basis
+        of the central mean subspace. Used to project new data onto the
+        central mean subspace.
+
     References
     ----------
 
@@ -166,6 +171,7 @@ class OuterProductGradients(BaseEstimator, TransformerMixin):
         # Center and scale feature matrix
         scaler = StandardScaler(copy=self.copy)
         X = scaler.fit_transform(X)
+        self.mean_ = scaler.mean_
 
         # pre-compute the kernel weights
         K = self._get_kernel(X) if kernel is None else kernel
@@ -213,4 +219,4 @@ class OuterProductGradients(BaseEstimator, TransformerMixin):
         check_is_fitted(self, 'directions_')
 
         X = check_array(X)
-        return np.dot(X, self.directions_.T)
+        return np.dot(X - self.mean_, self.directions_.T)
