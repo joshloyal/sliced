@@ -79,7 +79,7 @@ class PrincipalHessianDirections(BaseEstimator, TransformerMixin):
         Another Application of Stein's Lemma",
         Journal of the American Statistical Society, 1992 vol. 87 (420) pp. 1025-1039.
     """
-    def __init__(self, n_directions=None, target_type="residuals", copy=True):
+    def __init__(self, n_directions=None, target_type="residual", copy=True):
         self.n_directions = n_directions
         self.target_type = target_type
         self.copy = copy
