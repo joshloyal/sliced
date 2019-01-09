@@ -4,7 +4,14 @@ from __future__ import print_function
 
 from sklearn.utils.estimator_checks import check_estimator
 
-from sliced import SlicedInverseRegression, SlicedAverageVarianceEstimation
+from sliced import (
+    SlicedInverseRegression,
+    SlicedAverageVarianceEstimation,
+    PrincipalHessianDirections,
+    IterativeHessianTransformation,
+    OuterProductGradients
+    #MinimumAverageVarianceEstimation
+)
 
 
 def test_sir():

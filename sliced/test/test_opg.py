@@ -12,9 +12,10 @@ from sliced import datasets
 def test_cubic():
     X, y = datasets.make_cubic(random_state=123)
 
-    odr = OuterProductGradients().fit(X, y)
-    odr.transform(X)
+    opg = OuterProductGradients(n_directions=4).fit(X, y)
+    X_opg = opg.transform(X)
+    assert X_opg.shape == (X.shape[0], 4)
 
     true_beta = (1 / np.sqrt(2)) * np.hstack((np.ones(2), np.zeros(8)))
-    angle = np.dot(true_beta, odr.directions_[0, :])
+    angle = np.dot(true_beta, opg.directions_[0, :])
     np.testing.assert_allclose(np.abs(angle), 1, rtol=1e-1)
