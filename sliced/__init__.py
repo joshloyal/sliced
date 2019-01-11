@@ -8,6 +8,7 @@ from sliced import base
 from sliced import externals
 
 from sliced.sir import *
+from sliced.kir import *
 from sliced.save import *
 from sliced.phd import *
 from sliced.iht import *
