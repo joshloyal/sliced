@@ -5,14 +5,14 @@ from __future__ import print_function
 import numpy as np
 import pytest
 
-from sliced import KernalInverseRegression
+from sliced import KernelInverseRegression
 from sliced import datasets
 
 
 def test_cubic():
     X, y = datasets.make_cubic(random_state=123)
 
-    kir = KernalInverseRegression(n_directions=4).fit(X, y)
+    kir = KernelInverseRegression(n_directions=4).fit(X, y)
     X_kir = kir.transform(X)
     assert X_kir.shape == (X.shape[0], 4)
 

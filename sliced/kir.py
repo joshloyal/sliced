@@ -16,10 +16,10 @@ from .externals import check_array, check_X_y, check_is_fitted
 from .base import is_multioutput
 
 
-__all__ = ['KernalInverseRegression']
+__all__ = ['KernelInverseRegression']
 
 
-class KernalInverseRegression(BaseEstimator, TransformerMixin):
+class KernelInverseRegression(BaseEstimator, TransformerMixin):
     """Kernel Inverse Regression [1]
 
     Linear dimensionality reduction using the inverse regression curve,
