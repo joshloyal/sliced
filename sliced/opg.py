@@ -92,7 +92,7 @@ class OuterProductGradients(BaseEstimator, TransformerMixin):
     ----------
 
     [1] Xia, Y., Tong, H., Li, W. K., and Zhu, L.-X. (2002),
-        “An adaptive estimation of di- mension reduction space,”
+        “An adaptive estimation of dimension reduction space,”
         Journal of the Royal Statistical Society: Series B (Statistical Methodology),
         64, 363–410.
     """
