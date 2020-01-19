@@ -91,7 +91,7 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
         "Marginal Tests with Sliced Average Variance Estimation",
         Biometrika, 94, 285-296.
     """
-    def __init__(self, n_directions='auto', n_slices=10, copy=True):
+    def __init__(self, n_directions=None, n_slices=10, copy=True):
         self.n_directions = n_directions
         self.n_slices = n_slices
         self.copy = copy

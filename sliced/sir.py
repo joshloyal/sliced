@@ -72,7 +72,7 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
 
     Parameters
     ----------
-    n_directions : int, str or None (default='auto')
+    n_directions : int, str or None (default=None)
         Number of directions to keep. Corresponds to the dimension of
         the central subpace. If n_directions=='auto', the number of directions
         is chosen by finding the maximum gap in the ordered eigenvalues of
@@ -135,7 +135,7 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
     [2] Chen, C.H., and Li, K.C. (1998), "Can SIR Be as Popular as Multiple
         Linear Regression?" Statistica Sinica, 8, 289-316.
     """
-    def __init__(self, n_directions='auto', n_slices=10, alpha=None, copy=True):
+    def __init__(self, n_directions=None, n_slices=10, alpha=None, copy=True):
         self.n_directions = n_directions
         self.n_slices = n_slices
         self.alpha = alpha
