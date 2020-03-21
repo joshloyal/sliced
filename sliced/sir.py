@@ -72,7 +72,7 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
 
     Parameters
     ----------
-    n_directions : int, str or None (default='auto')
+    n_directions : int, str or None (default=None)
         Number of directions to keep. Corresponds to the dimension of
         the central subpace. If n_directions=='auto', the number of directions
         is chosen by finding the maximum gap in the ordered eigenvalues of
@@ -104,10 +104,21 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
         distribution y|X. The directions are sorted by ``eigenvalues_``.
 
     eigenvalues_ : array, shape (n_directions,)
-        The eigenvalues corresponding to each of the selected directions.
+        The eigenvalues corresponding to each selected direction.
         These are the eigenvalues of the covariance matrix
         of the inverse regression curve. Larger eigenvalues indicate
         more prevalent directions.
+
+    eigenvectors_ : array, shape (n_directions, n_features)
+        The eigenvectors on the z-scale corresponding to each selected
+        direction. These are the eigenvectors of the covariance of the
+        inverse regression curve. This is used primary for order
+        determination.
+
+    mean_ : array, shape (n_features,)
+        The column means of the training data used to estimate the basis
+        of the central subspace. Used to project new data onto the
+        central subspace.
 
     Examples
     --------
@@ -130,7 +141,7 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
     [2] Chen, C.H., and Li, K.C. (1998), "Can SIR Be as Popular as Multiple
         Linear Regression?" Statistica Sinica, 8, 289-316.
     """
-    def __init__(self, n_directions='auto', n_slices=10, alpha=None, copy=True):
+    def __init__(self, n_directions=None, n_slices=10, alpha=None, copy=True):
         self.n_directions = n_directions
         self.n_slices = n_slices
         self.alpha = alpha
@@ -185,10 +196,11 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
 
         # Center and Whiten feature matrix using a QR decomposition
         # (this is the approach used in the dr package)
+        self.mean_ = np.mean(X, axis=0)
         if self.copy:
-            X = X - np.mean(X, axis=0)
+            X = X - self.mean_
         else:
-            X -= np.mean(X, axis=0)
+            X -= self.mean_
         Q, R = linalg.qr(X, mode='economic')
         Z = np.sqrt(n_samples) * Q
         Z = Z[np.argsort(y), :]
@@ -228,6 +240,7 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
             directions[:, :self.n_directions_], norm='l2', axis=0)
         self.directions_ = directions.T
         self.eigenvalues_ = evals[:self.n_directions_]
+        self.eigenvectors_ = evecs[:, :self.n_directions_].T
 
         # Drop components in each direction using the t-ratio approach
         # suggested in section 4 of Chen and Li (1998).
@@ -278,4 +291,4 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
         check_is_fitted(self, 'directions_')
 
         X = check_array(X)
-        return np.dot(X, self.directions_.T)
+        return np.dot(X - self.mean_, self.directions_.T)

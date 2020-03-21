@@ -3,7 +3,6 @@ from __future__ import division
 from __future__ import print_function
 
 import six
-import warnings
 
 import numpy as np
 import scipy.linalg as linalg
@@ -16,87 +15,11 @@ from .externals import check_array, check_X_y, check_is_fitted
 from .base import slice_y, is_multioutput
 
 
-__all__ = ['SlicedAverageVarianceEstimation']
+__all__ = ['DirectionalRegression']
 
 
-class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
-    """Sliced Average Variance Estimation (SAVE) [1]
-
-    Linear dimensionality reduction using the conditional covariance, Cov(X|y),
-    to identify the directions defining the central subspace of the data.
-
-    The algorithm performs a weighted principal component analysis on a
-    transformation of slices of the covariance matrix of the whitened
-    data, which has been sorted with respect to the target, y.
-
-    Since SAVE looks at second moment information, it may miss first-moment
-    information. In particular, it may miss linear trends. See
-    :class:`sliced.sir.SlicedInverseRegression`, which is able to detect
-    linear trends but may fail in other situations. If possible, both SIR and
-    SAVE should be used when analyzing a dataset.
-
-    Parameters
-    ----------
-    n_directions : int, str or None (default='auto')
-        Number of directions to keep. Corresponds to the dimension of
-        the central subpace. If n_directions=='auto', the number of directions
-        is chosen by finding the maximum gap in the ordered eigenvalues of
-        the var(X|y) matrix and choosing the directions before this gap.
-        If n_directions==None, the number of directions equals the number of
-        features.
-
-    n_slices : int (default=10)
-        The number of slices used when calculating the inverse regression
-        curve. Truncated to at most the number of unique values of ``y``.
-
-    copy : bool (default=True)
-         If False, data passed to fit are overwritten and running
-         fit(X).transform(X) will not yield the expected results,
-         use fit_transform(X) instead.
-
-    Attributes
-    ----------
-    directions_ : array, shape (n_directions, n_features)
-        The directions in feature space, representing the
-        central subspace which is sufficient to describe the conditional
-        distribution y|X. The directions are sorted by ``eigenvalues_``.
-
-    eigenvalues_ : array, shape (n_directions,)
-        The eigenvalues corresponding to each of the selected directions.
-        These are the eigenvalues of the covariance matrix
-        of the inverse regression curve. Larger eigenvalues indicate
-        more prevelant directions.
-
-    eigenvectors_ : array, shape (n_directions,)
-        The eigenvectors on the z-scale corresponding to each selected
-        direction. These are the eigenvectors of the covariance of the
-        inverse regression curve. This is used primary for order
-        determination.
-
-    mean_ : array, shape (n_features,)
-        The column means of the training data used to estimate the basis
-        of the central subspace. Used to project new data onto the
-        central subspace.
-
-    Examples
-    --------
-
-    >>> import numpy as np
-    >>> from sliced import SlicedAverageVarianceEstimation
-    >>> from sliced.datasets import make_quadratic
-    >>> X, y = make_quadratic(random_state=123)
-    >>> save = SlicedAverageVarianceEstimation(n_directions=2)
-    >>> save.fit(X, y)
-    SlicedAverageVarianceEstimation(copy=True, n_directions=2, n_slices=10)
-    >>> X_save = save.transform(X)
-
-    References
-    ----------
-
-    [1] Shao, Y, Cook, RD and Weisberg, S (2007).
-        "Marginal Tests with Sliced Average Variance Estimation",
-        Biometrika, 94, 285-296.
-    """
+class DirectionalRegression(BaseEstimator, TransformerMixin):
+    """Directional Regression (DR)"""
     def __init__(self, n_directions=None, n_slices=10, copy=True):
         self.n_directions = n_directions
         self.n_slices = n_slices
@@ -121,13 +44,13 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
             Returns the instance itself.
         """
         if sparse.issparse(X):
-            raise TypeError("SlicedInverseRegression does not support "
+            raise TypeError("DirectionalRegression does not support "
                             "sparse input.")
 
         X, y = check_X_y(X, y, dtype=[np.float64, np.float32],
+                         accept_sparse=['csr'],
                          y_numeric=True, copy=self.copy)
 
-        # handle n_directions == None
         if self.n_directions is None:
             n_directions = X.shape[1]
         elif (not isinstance(self.n_directions, six.string_types) and
@@ -153,27 +76,34 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
             X -= self.mean_
         Q, R = linalg.qr(X, mode='economic')
         Z = np.sqrt(n_samples) * Q
-
-        # sort rows of Z with respect to the target y
         Z = Z[np.argsort(y), :]
 
-        # determine slices and counts
+        # determine slice indices and counts per slice
         slices, counts = slice_y(y, self.n_slices)
         self.n_slices_ = counts.shape[0]
 
-        # construct slice covariance matrices
-        M = np.zeros((n_features, n_features))
+        # Construct moment matrices
+        Mz = np.zeros((n_features, n_features))
+        Mzzt = np.zeros((n_features, n_features))
         for slice_idx in range(self.n_slices_):
             n_slice = counts[slice_idx]
+            p_slice = n_samples / n_slice
 
-            # center the entries in this slice
+            # extract entries in the slice
             Z_slice = Z[slices == slice_idx, :]
-            Z_slice -= np.mean(Z_slice, axis=0)
 
-            # slice covariance matrix
-            V_slice = np.dot(Z_slice.T, Z_slice) / n_slice
-            M_slice = np.eye(n_features) - V_slice
-            M += (n_slice / n_samples) * np.dot(M_slice, M_slice)
+            # extract empirical moments
+            Ez = np.mean(Z_slice, axis=0).reshape(-1, 1)
+            Ezzt = np.dot(Z_slice.T, Z_slice) / n_slice
+
+            # first moment matrix
+            Mz += p_slice * np.dot(Ez, Ez.T)
+
+            # second moment matrix
+            Mzzt += p_slice * np.dot(Ezzt, Ezzt)
+
+        M = 2 * Mzzt + 2 * np.dot(Mz, Mz) + 2 * np.trace(Mz) * Mz
+        M -= 2 * np.eye(n_features)
 
         # eigen-decomposition of slice matrix
         evals, evecs = linalg.eigh(M)
