@@ -67,6 +67,12 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
         of the inverse regression curve. Larger eigenvalues indicate
         more prevelant directions.
 
+    eigenvectors_ : array, shape (n_directions,)
+        The eigenvectors on the z-scale corresponding to each selected
+        direction. These are the eigenvectors of the covariance of the
+        inverse regression curve. This is used primary for order
+        determination.
+
     mean_ : array, shape (n_features,)
         The column means of the training data used to estimate the basis
         of the central subspace. Used to project new data onto the
@@ -198,6 +204,7 @@ class SlicedAverageVarianceEstimation(BaseEstimator, TransformerMixin):
         self.directions_ = directions.T
 
         self.eigenvalues_ = evals[:self.n_directions_]
+        self.eigenvectors_ = evecs[:, :self.n_directions_].T
 
         return self
 

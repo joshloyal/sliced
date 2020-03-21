@@ -104,10 +104,16 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
         distribution y|X. The directions are sorted by ``eigenvalues_``.
 
     eigenvalues_ : array, shape (n_directions,)
-        The eigenvalues corresponding to each of the selected directions.
+        The eigenvalues corresponding to each selected direction.
         These are the eigenvalues of the covariance matrix
         of the inverse regression curve. Larger eigenvalues indicate
         more prevalent directions.
+
+    eigenvectors_ : array, shape (n_directions, n_features)
+        The eigenvectors on the z-scale corresponding to each selected
+        direction. These are the eigenvectors of the covariance of the
+        inverse regression curve. This is used primary for order
+        determination.
 
     mean_ : array, shape (n_features,)
         The column means of the training data used to estimate the basis
@@ -234,6 +240,7 @@ class SlicedInverseRegression(BaseEstimator, TransformerMixin):
             directions[:, :self.n_directions_], norm='l2', axis=0)
         self.directions_ = directions.T
         self.eigenvalues_ = evals[:self.n_directions_]
+        self.eigenvectors_ = evecs[:, :self.n_directions_].T
 
         # Drop components in each direction using the t-ratio approach
         # suggested in section 4 of Chen and Li (1998).

@@ -166,6 +166,7 @@ class PrincipalHessianDirections(BaseEstimator, TransformerMixin):
             directions[:, :self.n_directions_], norm='l2', axis=0)
         self.directions_ = directions.T
         self.eigenvalues_ = evals[:self.n_directions_]
+        self.eigenvectors_ = evecs[:, :self.n_directions_].T
 
         return self
 

@@ -134,6 +134,7 @@ class DirectionalRegression(BaseEstimator, TransformerMixin):
         self.directions_ = directions.T
 
         self.eigenvalues_ = evals[:self.n_directions_]
+        self.eigenvectors_ = evecs[:, :self.n_directions_].T
 
         return self
 

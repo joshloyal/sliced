@@ -14,4 +14,6 @@ from sliced.phd import *
 from sliced.iht import *
 from sliced.opg import *
 from sliced.dr import *
+from sliced.ladle import *
+from sliced.bic import *
 from sliced.version import *
