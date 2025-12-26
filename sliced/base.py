@@ -116,7 +116,7 @@ def slice_y(y, n_slices=10):
             slice_partition.append(n_samples_seen)
 
     # turn partitions into an indicator
-    slice_indicator = np.ones(y.shape[0], dtype=np.int)
+    slice_indicator = np.ones(y.shape[0], dtype=int)
     for j, (start_idx, end_idx) in enumerate(
             zip(slice_partition, slice_partition[1:])):
 

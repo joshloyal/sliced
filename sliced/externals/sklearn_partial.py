@@ -14,7 +14,6 @@ import six
 
 import numpy as np
 import scipy.sparse as sp
-from numpy.core.numeric import ComplexWarning
 
 
 class NotFittedError(ValueError, AttributeError):
@@ -368,13 +367,15 @@ def check_array(array, accept_sparse=False, dtype="numeric", order=None,
         # dtype to the function converts complex to real dtype,
         # thereby passing the test made in the lines following the scope
         # of warnings context manager.
-        with warnings.catch_warnings():
-            try:
-                warnings.simplefilter('error', ComplexWarning)
-                array = np.asarray(array, dtype=dtype, order=order)
-            except ComplexWarning:
-                raise ValueError("Complex data not supported\n"
-                                 "{}\n".format(array))
+        #with warnings.catch_warnings():
+        #    try:
+        #        warnings.simplefilter('error', ComplexWarning)
+        #        array = np.asarray(array, dtype=dtype, order=order)
+        #    except ComplexWarning:
+        #        raise ValueError("Complex data not supported\n"
+        #                         "{}\n".format(array))
+
+        # skip for numpy 2
 
         # It is possible that the np.array(..) gave no warning. This happens
         # when no dtype conversion happened, for example dtype = None. The
